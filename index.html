@@ -187,7 +187,7 @@ tbody tr:hover{background:rgba(255,255,255,0.5)}
 .rtx{font-size:12px;color:var(--mid);margin-top:5px;font-style:italic}
 
 /* QUICK ISSUE GRID */
-.qg{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;padding:16px 20px}
+.qg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;padding:16px 20px}
 .qb{padding:15px 12px;border-radius:var(--r);background:rgba(255,255,255,0.75);border:1.5px solid rgba(255,255,255,0.88);cursor:pointer;text-align:center;transition:all .2s;font-family:'DM Sans',sans-serif}
 .qb:hover{background:#fff;border-color:var(--g);transform:translateY(-2px);box-shadow:var(--BS)}
 .qb:active{transform:scale(.96)}
@@ -338,17 +338,67 @@ tbody tr:hover{background:rgba(255,255,255,0.5)}
 .urgbtn.on{background:var(--g);color:#fff;border-color:var(--g)}
 
 /* MOBILE */
+
+/* ── SIDEBAR OVERLAY ── */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:299;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.sb-overlay.on{display:block}
+
 @media(max-width:768px){
   .sidebar{transform:translateX(-260px)}.sidebar.open{transform:translateX(0)}
   .main{margin-left:0}.hbg{display:flex}
-  .body{padding:14px;padding-bottom:calc(var(--nb)+14px)}
-  .sg{grid-template-columns:repeat(2,1fr)}
   .bnav{display:flex}.topbar .sbadge{display:none}
-  .lg{grid-template-columns:1fr}
-  .fb .fg{grid-template-columns:1fr}
-  .fi.f2{grid-column:1}
+  .topbar{height:54px;padding:0 14px}
+  .ptitle{font-size:17px}
+  .body{padding:12px;padding-bottom:calc(var(--nb) + 16px)}
+  .sg{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+  .sc{padding:14px 12px}.sc-val{font-size:30px}.sc-em{font-size:18px;margin-bottom:6px}.sc-lb{font-size:9px}
+  .card{border-radius:14px;margin-bottom:12px}.ch{padding:13px 15px}.ct{font-size:13px}
+  .ts{-webkit-overflow-scrolling:touch}
+  table{font-size:12px}
+  thead th{padding:8px 12px;font-size:9px}
+  tbody td{padding:10px 12px}
+  .sr{padding:10px 13px;gap:7px}.sw2{max-width:none;flex:1}.fc{padding:5px 11px;font-size:10px}
+  .fb{padding:14px}.fg{grid-template-columns:1fr;gap:11px}.fi.f2,.fi.fa{grid-column:1}
+  .fi label{font-size:10px}
+  .fi input,.fi select,.fi textarea{padding:12px;font-size:16px}
+  .ff{padding:12px 14px;flex-wrap:wrap}.ff .btn{flex:1;min-width:100px;justify-content:center}
+  .qg{grid-template-columns:repeat(2,1fr);gap:9px;padding:12px 13px}
+  .qb{padding:14px 10px}.qb-em{font-size:20px}.qb-nm{font-size:11px}.qb-st{font-size:10px}
+  .lg{grid-template-columns:1fr;gap:12px;padding:14px}.lc{padding:14px}
+  .cycle-board{grid-template-columns:1fr}.cycle-col{border-right:none;border-bottom:1px solid rgba(61,107,79,.07);padding:12px}
+  .bs{border-radius:22px 22px 0 0}
+  .bsb{gap:11px;padding:0 16px 16px}.bsf{padding:12px 16px 28px;gap:8px}
+  .bsf .btn{flex:1;justify-content:center;padding:13px 10px;font-size:13px}
+  .bshd{padding:4px 16px 14px}
+  .bnav{padding:0 6px}.bb{min-width:44px;padding:7px 8px}.bb-ic{font-size:20px}.bb-lb{font-size:9px}
+  .bfab{width:48px;height:48px;font-size:20px;margin-top:-12px}
+  .lb{border-radius:20px;margin:12px}.lbh{padding:24px 20px 14px}.lbb{padding:14px 18px 22px}
+  .si2{padding:11px 13px}.sn2{font-size:13px}.sr2{font-size:10px}
+  .role-card{padding:12px 14px}.role-icon{width:36px;height:36px;font-size:17px}
+  .ar{padding:11px 14px;gap:11px}.ad{width:32px;height:32px}.an{font-size:12px}.at{font-size:10px}
+  .cpop{margin:0 10px;border-radius:20px}
+  .rsg{grid-template-columns:repeat(2,1fr);gap:8px;padding:12px}.rs{padding:12px}.rsv{font-size:24px}
+  .rr{padding:12px 14px;gap:10px}.rn{font-size:12px}.rm{font-size:10px}
+  #topbar-logo{display:none}
+  .sb-top{padding:14px 14px 12px}.sb-me{margin:8px;padding:9px 12px}
+  .ng{padding:12px 12px 4px;font-size:9px}.ni{padding:9px 12px;margin:1px 6px;font-size:12px}
+  .hide-m{display:none!important}
 }
-@media(max-width:380px){.sg{grid-template-columns:repeat(2,1fr)}.sc-val{font-size:28px}}
+@media(max-width:420px){
+  .sg{grid-template-columns:repeat(2,1fr)}.qg{grid-template-columns:repeat(2,1fr)}
+  .body{padding:10px;padding-bottom:calc(var(--nb) + 12px)}
+  .sc-val{font-size:26px}
+}
+@media(hover:none){
+  .btn:hover{transform:none!important}.sc:hover{transform:none;box-shadow:var(--BS)}
+  .qb:hover{transform:none;box-shadow:none}.lc:hover{transform:none;box-shadow:var(--BS)}
+  .si2:hover{transform:translateX(0)}
+}
+@supports(padding-bottom:env(safe-area-inset-bottom)){
+  .bnav{height:calc(var(--nb) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom)}
+  .body{padding-bottom:calc(var(--nb) + env(safe-area-inset-bottom) + 12px)!important}
+  .bsf{padding-bottom:max(22px,env(safe-area-inset-bottom))}
+}.sc-val{font-size:28px}}
 </style>
 </head>
 <body>
@@ -432,6 +482,7 @@ tbody tr:hover{background:rgba(255,255,255,0.5)}
     <button class="ni" onclick="showCfg()"><span class="ni-ic">⚙</span>Sheet Config</button>
     <div class="sb-bot"><button class="sb-out" onclick="logout()">⏻ Switch User</button></div>
   </aside>
+  <div class="sb-overlay" id="sb-overlay" onclick="toggleSB()"></div>
 
   <div class="main">
     <header class="topbar">
@@ -546,7 +597,11 @@ tbody tr:hover{background:rgba(255,255,255,0.5)}
       <!-- CONSUME (quick grid) -->
       <div class="page" id="page-consume">
         <div class="card g1">
-          <div class="ch"><div class="ct"><span class="ci cio">↑</span>Issue / Consume</div>
+          <div class="ch">
+            <div class="ct" style="flex-direction:column;align-items:flex-start;gap:2px">
+              <div style="display:flex;align-items:center;gap:8px"><span class="ci cio">↑</span><span>Issue / Consume</span></div>
+              <div id="consume-greeting" style="font-size:11px;font-weight:400;color:var(--mid);margin-left:36px"></div>
+            </div>
             <div style="display:flex;gap:6px" id="store-toggle">
               <button class="tog on" id="ct-sub" onclick="setCStore('sub',this)">Sub Store</button>
               <button class="tog" id="ct-main" onclick="setCStore('main',this)" style="display:none">Main Store</button>
@@ -1213,8 +1268,7 @@ function login(id) {
   ME = {...s, ra: typeof s.roles==='string' ? s.roles.split('|') : (s.roles||[])};
   el('lw').style.display = 'none';
   el('app').style.display = 'flex';
-  applyMe();
-  go('dashboard');
+  applyMe(); // applyMe handles where to go based on role
 }
 
 function applyMe() {
@@ -1266,8 +1320,20 @@ function applyMe() {
     }
   }
 
-  // Therapist home = consume
-  if (isT) go('consume');
+  // Set consume page greeting
+  const greet = el('consume-greeting');
+  if (greet) {
+    const hour = new Date().getHours();
+    const tod = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    greet.textContent = `${tod}, ${ME.name.split(' ')[0]} 👋`;
+  }
+
+  // Route to correct home screen based on role
+  if (isT) {
+    go('consume'); // Therapist home = consume
+  } else {
+    go('dashboard'); // Everyone else = dashboard
+  }
 }
 
 function logout() {
@@ -1289,7 +1355,7 @@ function go(id) {
   const nb = document.querySelector(`button.ni[onclick="go('${id}')"]`); if(nb) nb.classList.add('on');
   el('ptitle').textContent = TITLES[id]||id;
   CP = id;
-  if(window.innerWidth<=768) el('sidebar').classList.remove('open');
+  if(window.innerWidth<=768){el('sidebar').classList.remove('open');el('sb-overlay').classList.remove('on');}
   // Bottom nav
   document.querySelectorAll('.bb').forEach(b=>b.classList.remove('on'));
   const bn = el('bn-'+id); if(bn) bn.classList.add('on');
@@ -1316,7 +1382,10 @@ function refreshPage(id) {
   if(id==='tracker')    renderTracker();
 }
 
-function toggleSB(){el('sidebar').classList.toggle('open');}
+function toggleSB(){
+  el('sidebar').classList.toggle('open');
+  el('sb-overlay').classList.toggle('on');
+}
 
 // ── DASHBOARD ─────────────────────────────────────────────
 function renderDash() {
