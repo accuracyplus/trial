@@ -308,25 +308,27 @@ body{
   .tab-content-wrap{margin:0 14px;padding:16px;}
 }
 
-@media (max-width: 900px) {
-  .tabs-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
-  .tab { flex-shrink: 0; min-height: 44px; }
-  .flow-layout { flex-direction: column; gap: 10px; }
-  .dept-nav { width: 100%; position: static; max-height: none;
-    display: flex; flex-direction: row; flex-wrap: nowrap;
-    overflow-x: auto; gap: 6px; padding: 8px; }
-  .dn-label { display: none; }
-  .dn-item { flex-shrink: 0; white-space: nowrap; border-radius: 100px;
-    padding: 8px 14px; margin-bottom: 0; }
-  .flow-display { padding: 14px; }
-  .q-grid { grid-template-columns: 1fr; }
-  .q-card-wide { grid-column: span 1; }
-  #gap-checklist > div { grid-template-columns: 1fr; }
+@media(max-width:900px){
+  .tabs-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;}
+  .tab{flex-shrink:0;min-height:44px;}
+  .flow-layout{flex-direction:column;gap:10px;}
+  .dept-nav{width:100%;position:static;max-height:none;
+    display:flex;flex-direction:row;flex-wrap:nowrap;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;gap:6px;padding:8px;}
+  .dept-nav::-webkit-scrollbar{display:none;}
+  .dn-label{display:none;}
+  .dn-item{flex-shrink:0;white-space:nowrap;border-radius:100px;
+    padding:8px 14px;margin-bottom:0;}
+  .flow-display{padding:14px;}
+  .q-grid{grid-template-columns:1fr;}
+  .q-card-wide{grid-column:span 1;}
+  #gap-checklist > div{grid-template-columns:1fr;}
 }
-@media (max-width: 560px) {
-  .hdr-sub { display: none; }
-  .tab { padding: 9px 10px; font-size: 11.5px; }
-  .tab-content-wrap { margin: 0 6px; padding: 10px; }
+@media(max-width:560px){
+  .hdr-sub{display:none;}
+  .tab{padding:9px 10px;font-size:11.5px;}
+  .tab-content-wrap{margin:0 6px;padding:10px;}
 }
 </style>
 </head>
@@ -454,9 +456,9 @@ body{
 </div><!-- tab-content-wrap -->
 
 <script>
-// ═══════════════════════════════════
+// -----------------------------------
 // TABS
-// ═══════════════════════════════════
+// -----------------------------------
 function showView(id, el) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -464,9 +466,9 @@ function showView(id, el) {
   el.classList.add('active');
 }
 
-// ═══════════════════════════════════
+// -----------------------------------
 // CLAY SVG ENGINE
-// ═══════════════════════════════════
+// -----------------------------------
 const C = { W:660, vG:28, dS:44, bO:156, bW:172 };
 C.cx = C.W / 2;
 
@@ -508,7 +510,7 @@ function nodeH(label, sub, w) {
 function drawClayNode(step, cx, y, w) {
   w = w || 210;
   const hw = w / 2;
-  const prefix = step.type==='gap' ? '⚠ ' : step.type==='handoff' ? '→ ' : '';
+  const prefix = step.type==='gap' ? '(!) ' : step.type==='handoff' ? '-> ' : '';
   const label = prefix + step.label;
   const col = CLAY[step.type] || CLAY.process;
   const cpl = Math.floor(w / 7.4);
@@ -643,50 +645,50 @@ function makeSVG(steps) {
   </svg>`;
 }
 
-// ═══════════════════════════════════
+// -----------------------------------
 // DEPT FLOW DATA
-// ═══════════════════════════════════
+// -----------------------------------
 const DEPTS = [
   { id:'fo',  label:'Front Office', full:'Front Office & Reception', color:'#5B9BD5', directedTo:'Reception Supervisor / Shift Lead', gaps:4,
     steps:[
       {type:'start',    label:'Patient Arrives'},
-      {type:'process',  label:'Identify Patient Category', sub:'B2B · Daman Insurance · Other Insurance · B2C'},
+      {type:'process',  label:'Identify Patient Category', sub:'B2B . Daman Insurance . Other Insurance . B2C'},
       {type:'decision', label:'Insurance Patient?',
         yes:[
-          {type:'process', label:'Eligibility & Coverage Check', sub:'Services covered · exclusions · waiting period verified'},
+          {type:'process', label:'Eligibility & Coverage Check', sub:'Services covered . exclusions . waiting period verified'},
           {type:'process', label:'Pre-approval Initiated if Required'},
-          {type:'gap',     label:'No SLA for Approval Follow-up', sub:'Frequency is ad hoc — no target defined'},
+          {type:'gap',     label:'No SLA for Approval Follow-up', sub:'Frequency is ad hoc  -  no target defined'},
         ],
         no:[{type:'process', label:'Direct Registration', sub:'B2C walk-in or B2B standing order'}]
       },
       {type:'process', label:'Patient Registered in System', sub:'Invoice + request form generated'},
-      {type:'process', label:'Manage All Communications', sub:'Calls · WhatsApp messages · email queries'},
+      {type:'process', label:'Manage All Communications', sub:'Calls . WhatsApp messages . email queries'},
       {type:'gap',     label:'No TAT Breach Alert', sub:'TAT updated in tracker but no escalation trigger exists'},
       {type:'decision',label:'Patient Complaint Received?',
         yes:[{type:'gap', label:'No Resolution SLA Defined', sub:'No timeline or formal escalation path documented'}],
         no: [{type:'process', label:'Continue Normal Flow'}]
       },
       {type:'decision',label:'Trudoc or Clinic Request?',
-        yes:[{type:'handoff', label:'Eligibility Confirmed → Hand to Logistics', sub:'Patient details forwarded via WhatsApp group'}],
+        yes:[{type:'handoff', label:'Eligibility Confirmed -> Hand to Logistics', sub:'Patient details forwarded via WhatsApp group'}],
         no: [{type:'process',  label:'In-clinic Sample Collection'}]
       },
       {type:'gap',  label:'Survey Data Not Analysed', sub:'Source-of-visit survey collected but reporting absent'},
       {type:'end',  label:'Registration & Communication Complete'},
     ]
   },
-  { id:'lab', label:'Lab · Quality · Phlebotomy', full:'Lab, Quality, Phlebotomy & Microbiology', color:'#48B07C', directedTo:'Quality Manager', gaps:5,
+  { id:'lab', label:'Lab . Quality . Phlebotomy', full:'Lab, Quality, Phlebotomy & Microbiology', color:'#48B07C', directedTo:'Quality Manager', gaps:5,
     steps:[
       {type:'start',   label:'Sample Arrives at Accession'},
       {type:'process', label:'Lab Tech Acknowledges in Sample Register', sub:'Sample number + collection time noted'},
       {type:'process', label:'TRF Verified + Sample Quality Check', sub:'Acceptance or rejection criteria applied'},
       {type:'decision',label:'Sample Acceptable?', yesLabel:'Accept', noLabel:'Reject',
         yes:[
-          {type:'process', label:'Centrifuge + Segregate', sub:'Clinical Pathology · Microbiology · Other'},
+          {type:'process', label:'Centrifuge + Segregate', sub:'Clinical Pathology . Microbiology . Other'},
           {type:'process', label:'Barcode Generated + Sample Acknowledged'},
         ],
         no:[
           {type:'gap',    label:'Rejection Re-collection Not Logged', sub:'Client notified but re-collection outcome untracked'},
-          {type:'end',    label:'Sample Rejected — Client Notified'},
+          {type:'end',    label:'Sample Rejected  -  Client Notified'},
         ]
       },
       {type:'decision',label:'Urgent STAT Sample?', yesLabel:'STAT', noLabel:'Routine',
@@ -694,7 +696,7 @@ const DEPTS = [
           {type:'gap',     label:'No STAT TAT Target Defined', sub:'Urgent samples have no measurable KPI'},
           {type:'process', label:'STAT Processing Mode on Analyser'},
         ],
-        no:[{type:'process', label:'Routine Loading to Analyser', sub:'AU480 · ACCESS 2 · MAGLUMI X3 · Mindray · Sysmex'}]
+        no:[{type:'process', label:'Routine Loading to Analyser', sub:'AU480 . ACCESS 2 . MAGLUMI X3 . Mindray . Sysmex'}]
       },
       {type:'process', label:'Test Results Generated'},
       {type:'decision',label:'Abnormal Result?',
@@ -721,19 +723,19 @@ const DEPTS = [
       {type:'start',   label:'Collection Request Received'},
       {type:'decision',label:'Collection Type?', yesLabel:'Home/Trudoc', noLabel:'B2B',
         yes:[
-          {type:'process', label:'Supervisor Assigns Phlebotomist + Route', sub:'Kit prepared · collection time confirmed with patient'},
-          {type:'process', label:'Patient Visited · ID Verified · Sample Collected'},
-          {type:'gap',     label:'No Registration Confirmation Loop', sub:'Details sent via WhatsApp — no acknowledgement check'},
+          {type:'process', label:'Supervisor Assigns Phlebotomist + Route', sub:'Kit prepared . collection time confirmed with patient'},
+          {type:'process', label:'Patient Visited . ID Verified . Sample Collected'},
+          {type:'gap',     label:'No Registration Confirmation Loop', sub:'Details sent via WhatsApp  -  no acknowledgement check'},
         ],
         no:[
-          {type:'process', label:'Client Notifies Sample Readiness', sub:'Via B2B WhatsApp group — team confirms collection'},
+          {type:'process', label:'Client Notifies Sample Readiness', sub:'Via B2B WhatsApp group  -  team confirms collection'},
           {type:'process', label:'Driver Travels with Box + Driver Form'},
-          {type:'gap',     label:'Paper-only Driver Form', sub:'No digital trail — duplicate safeguard absent'},
+          {type:'gap',     label:'Paper-only Driver Form', sub:'No digital trail  -  duplicate safeguard absent'},
           {type:'process', label:'Sample Handover Signed by Client MC Rep'},
         ]
       },
       {type:'decision',label:'Trudoc Eligibility Confirmed Before Dispatch?',
-        yes:[{type:'process', label:'Eligibility Confirmed — Dispatch Authorised'}],
+        yes:[{type:'process', label:'Eligibility Confirmed  -  Dispatch Authorised'}],
         no: [{type:'gap',     label:'Dispatch Before Eligibility Confirmed', sub:'Risk of ineligible collection and wasted trip'}]
       },
       {type:'gap',     label:'No Driver Backup Coverage Matrix', sub:'No documented reliever plan when primary driver absent'},
@@ -745,8 +747,8 @@ const DEPTS = [
     steps:[
       {type:'start',   label:'Claim Process Initiated'},
       {type:'process', label:'Pending Approvals + Queries Reviewed with Reception'},
-      {type:'process', label:'ICD Code & Medical Necessity Validated', sub:'Primary + secondary diagnosis · tariff verified'},
-      {type:'process', label:'Documentation Completeness Check', sub:'Claim forms · signatures · lab reports confirmed'},
+      {type:'process', label:'ICD Code & Medical Necessity Validated', sub:'Primary + secondary diagnosis . tariff verified'},
+      {type:'process', label:'Documentation Completeness Check', sub:'Claim forms . signatures . lab reports confirmed'},
       {type:'decision',label:'Within 7-Day Internal Target?', yesLabel:'On Time', noLabel:'Delayed',
         yes:[{type:'process', label:'Claim Submitted to Insurer via EMR'}],
         no: [{type:'gap',     label:'No Alert for 7-Day Target Breach', sub:'No system-level notification when deadline is approaching'}]
@@ -754,11 +756,11 @@ const DEPTS = [
       {type:'process', label:'Claim Status Monitored via EMR Insurance Menu'},
       {type:'decision',label:'Claim Denied?',
         yes:[
-          {type:'gap',     label:'No Denial Code Register Maintained', sub:'Trend analysis not possible — patterns invisible'},
+          {type:'gap',     label:'No Denial Code Register Maintained', sub:'Trend analysis not possible  -  patterns invisible'},
           {type:'process', label:'Corrective Documents Updated'},
           {type:'gap',     label:'Resubmission Tracker Not Formalised', sub:'Risk of missing the 30-day resubmission window'},
         ],
-        no:[{type:'process', label:'Claim Approved — Moved to Reconciliation'}]
+        no:[{type:'process', label:'Claim Approved  -  Moved to Reconciliation'}]
       },
       {type:'process', label:'Weekly MIS + Monthly Rejection Report to Accounts'},
       {type:'gap',  label:'No Standard Patient Communication Script', sub:'Co-pay and coverage details communicated inconsistently'},
@@ -770,15 +772,15 @@ const DEPTS = [
       {type:'start',   label:'Daily Morning Review'},
       {type:'process', label:'Consumable Requests Reviewed from Emails', sub:'Sample count cross-checked against email requests'},
       {type:'process', label:'Consumables Issued per FIFO / FEFO', sub:'Delivery note prepared + signed by client + filed'},
-      {type:'gap',     label:'Excel Log Only — No System Integration', sub:'Manual daily request log — no reconciliation audit trail'},
-      {type:'process', label:'Weekly Stock Check — Main + Sub-store', sub:'Transfer registered · low stock triggers purchase request'},
+      {type:'gap',     label:'Excel Log Only  -  No System Integration', sub:'Manual daily request log  -  no reconciliation audit trail'},
+      {type:'process', label:'Weekly Stock Check  -  Main + Sub-store', sub:'Transfer registered . low stock triggers purchase request'},
       {type:'process', label:'LPO Raised + Sent to Suppliers', sub:'Approved by Operations Manager before sending'},
-      {type:'process', label:'GRN Entered on Delivery', sub:'Quantity · temperature · lot number · expiry date verified'},
+      {type:'process', label:'GRN Entered on Delivery', sub:'Quantity . temperature . lot number . expiry date verified'},
       {type:'decision',label:'Item Rejected on Delivery?',
-        yes:[{type:'gap', label:'Rejection Not Recorded Against Supplier', sub:'No vendor scorecard — repeat failures undetected'}],
+        yes:[{type:'gap', label:'Rejection Not Recorded Against Supplier', sub:'No vendor scorecard  -  repeat failures undetected'}],
         no: [{type:'process', label:'Stock Stored and Accepted'}]
       },
-      {type:'gap',  label:'Reorder Level Has No System Alert', sub:'Manual threshold — no automated stock alert trigger'},
+      {type:'gap',  label:'Reorder Level Has No System Alert', sub:'Manual threshold  -  no automated stock alert trigger'},
       {type:'gap',  label:'Temperature Log Not Linked to GRN', sub:'Daily log maintained but not tied to acceptance criteria'},
       {type:'end',  label:'Inventory Cycle Complete'},
     ]
@@ -787,29 +789,29 @@ const DEPTS = [
     steps:[
       {type:'start',   label:'Daily Accounts Activities'},
       {type:'process', label:'Core Lab Invoicing in Tally Based on MIS'},
-      {type:'gap',     label:'MIS Dependency — No Contingency Plan', sub:'If MIS is delayed or unavailable invoicing chain stalls'},
+      {type:'gap',     label:'MIS Dependency  -  No Contingency Plan', sub:'If MIS is delayed or unavailable invoicing chain stalls'},
       {type:'process', label:'B2C Collections Recorded in Tally'},
       {type:'process', label:'Receipts Issued + Register Maintained'},
-      {type:'gap',     label:'Receipt Register Not Standardised', sub:'Format varies across shifts — inconsistency risk'},
+      {type:'gap',     label:'Receipt Register Not Standardised', sub:'Format varies across shifts  -  inconsistency risk'},
       {type:'process', label:'Daily Card Reconciliation Performed'},
       {type:'gap',     label:'No Sign-off Authority for Card Reconciliation', sub:'No documented sign-off or escalation for mismatches'},
       {type:'process', label:'Monthly Client-wise Invoice Verification'},
-      {type:'handoff', label:'Insurance MIS + Rejection Reports Received', sub:'From Insurance Coordinator — weekly and monthly'},
+      {type:'handoff', label:'Insurance MIS + Rejection Reports Received', sub:'From Insurance Coordinator  -  weekly and monthly'},
       {type:'end',     label:'Accounts Reconciliation Complete'},
     ]
   },
   { id:'it',  label:'IT Operations', full:'IT Operations', color:'#52AF82', directedTo:'IT In-charge', gaps:3,
     steps:[
       {type:'start',   label:'IT Request Received'},
-      {type:'process', label:'Channel: Email · Phone · WhatsApp · Direct'},
-      {type:'gap',     label:'No SLA Matrix — No Priority Triage', sub:'No defined response time per request category'},
+      {type:'process', label:'Channel: Email . Phone . WhatsApp . Direct'},
+      {type:'gap',     label:'No SLA Matrix  -  No Priority Triage', sub:'No defined response time per request category'},
       {type:'decision',label:'Dept Type?', yesLabel:'Lab/Clinical', noLabel:'Admin/Support',
-        yes:[{type:'process', label:'Machine Config · Middleware · LIS · Backup', sub:'ADHICS v2 compliance + security monitoring'}],
-        no: [{type:'process', label:'Reception · Accounts · HR · Marketing', sub:'EMR · Tally · Keka · printer · email support'}]
+        yes:[{type:'process', label:'Machine Config . Middleware . LIS . Backup', sub:'ADHICS v2 compliance + security monitoring'}],
+        no: [{type:'process', label:'Reception . Accounts . HR . Marketing', sub:'EMR . Tally . Keka . printer . email support'}]
       },
-      {type:'process', label:'Branch Support — Remote or On-site', sub:'Wi-Fi · EMR · Printer · Biometric · Security'},
+      {type:'process', label:'Branch Support  -  Remote or On-site', sub:'Wi-Fi . EMR . Printer . Biometric . Security'},
       {type:'process', label:'Monthly Cybersecurity Awareness Training'},
-      {type:'process', label:'Third-party Vendor Coordination', sub:'EMR · Keka · CRM · web dev teams'},
+      {type:'process', label:'Third-party Vendor Coordination', sub:'EMR . Keka . CRM . web dev teams'},
       {type:'process', label:'Issue Resolved + Documented'},
       {type:'gap',     label:'No Helpdesk Ticketing System', sub:'No platform to log, track, or audit requests and resolutions'},
       {type:'end',     label:'IT Support Complete'},
@@ -818,20 +820,20 @@ const DEPTS = [
   { id:'bde', label:'Business Development', full:'Business Development', color:'#5AAED4', directedTo:'BDE / BDE Lead', gaps:4,
     steps:[
       {type:'start',   label:'Market Research + Lead Identification'},
-      {type:'process', label:'Competitor Pricing + Panel Analysis', sub:'Clients segmented: hospitals · clinics · corporates'},
-      {type:'process', label:'Cold Calls · Field Visits · Referrals'},
-      {type:'process', label:'Initial Meeting — Lab Profile Presented', sub:'Accreditations · test menu · TAT · home collection'},
+      {type:'process', label:'Competitor Pricing + Panel Analysis', sub:'Clients segmented: hospitals . clinics . corporates'},
+      {type:'process', label:'Cold Calls . Field Visits . Referrals'},
+      {type:'process', label:'Initial Meeting  -  Lab Profile Presented', sub:'Accreditations . test menu . TAT . home collection'},
       {type:'process', label:'Customised Proposal Prepared + Presented'},
       {type:'decision',label:'Negotiation Required?',
         yes:[{type:'gap', label:'No Discount Approval Path Defined', sub:'Non-standard terms approved without clear authority'}],
         no: [{type:'process', label:'Standard Terms Agreed and Signed'}]
       },
-      {type:'process', label:'Agreement Signed + Documents Collected', sub:'Trade licence · DOH licence · VAT certificate'},
+      {type:'process', label:'Agreement Signed + Documents Collected', sub:'Trade licence . DOH licence . VAT certificate'},
       {type:'process', label:'Collection Schedule Established'},
       {type:'gap',     label:'Onboarding Handover Not Documented', sub:'No checklist for IT setup and operations coordination'},
-      {type:'handoff', label:'Handover to IT · Logistics · Operations', sub:'Portal access · collection routes · test mapping'},
+      {type:'handoff', label:'Handover to IT . Logistics . Operations', sub:'Portal access . collection routes . test mapping'},
       {type:'process', label:'Weekly Client Follow-up + Issue Resolution'},
-      {type:'gap',     label:'No CRM — Pipeline Not Tracked', sub:'Sales activity and conversion rates are not measurable'},
+      {type:'gap',     label:'No CRM  -  Pipeline Not Tracked', sub:'Sales activity and conversion rates are not measurable'},
       {type:'gap',     label:'No Re-engagement Process for Volume Drops', sub:'Declining client accounts go undetected'},
       {type:'end',     label:'Client Onboarded + Retained'},
     ]
@@ -839,31 +841,31 @@ const DEPTS = [
   { id:'pc',  label:'Patient Coordinator', full:'Patient Coordinator (Dedicated Role)', color:'#D4A55B', directedTo:'Patient Coordinator', gaps:3,
     steps:[
       {type:'start',   label:'B2C Patient Contact Initiated'},
-      {type:'gap',     label:'Handover from Front Office Undefined', sub:'No formal protocol — role boundary not documented'},
-      {type:'process', label:'Patient Ownership Assumed', sub:'Phone · WhatsApp · callback management'},
+      {type:'gap',     label:'Handover from Front Office Undefined', sub:'No formal protocol  -  role boundary not documented'},
+      {type:'process', label:'Patient Ownership Assumed', sub:'Phone . WhatsApp . callback management'},
       {type:'process', label:'Test Package Selection Assisted'},
       {type:'process', label:'Appointment + Collection Prep Managed'},
       {type:'process', label:'Result Notification Sent to Patient'},
       {type:'process', label:'Billing Dispute + Co-pay Query Resolved'},
-      {type:'process', label:'Post-visit Feedback Collected', sub:'Digital · verbal · WhatsApp survey'},
-      {type:'gap',     label:'Feedback Not Formally Actioned', sub:'No review-and-action loop — recurring issues persist'},
+      {type:'process', label:'Post-visit Feedback Collected', sub:'Digital . verbal . WhatsApp survey'},
+      {type:'gap',     label:'Feedback Not Formally Actioned', sub:'No review-and-action loop  -  recurring issues persist'},
       {type:'decision',label:'Poor Experience Reported?',
-        yes:[{type:'process', label:'Service Recovery Initiated', sub:'No formal protocol — handled ad hoc currently'}],
+        yes:[{type:'process', label:'Service Recovery Initiated', sub:'No formal protocol  -  handled ad hoc currently'}],
         no: [{type:'process', label:'Normal Follow-up Completed'}]
       },
-      {type:'gap',     label:'No B2C Retention Tracking', sub:'Repeat-visit rate not monitored — attrition invisible'},
+      {type:'gap',     label:'No B2C Retention Tracking', sub:'Repeat-visit rate not monitored  -  attrition invisible'},
       {type:'end',     label:'Patient Experience Managed'},
     ]
   },
   { id:'gm',  label:'General Manager', full:'General Manager (Operations)', color:'#5B7FAF', directedTo:'General Manager / Operations Head', gaps:2,
     steps:[
       {type:'start',   label:'GM Operational Oversight'},
-      {type:'process', label:'Financial + Operational Review', sub:'P&L · revenue per client · AR ageing · cash flow'},
+      {type:'process', label:'Financial + Operational Review', sub:'P&L . revenue per client . AR ageing . cash flow'},
       {type:'process', label:'Staffing + Workforce Decisions Approved'},
       {type:'process', label:'Policy + Pricing Updates Approved + Communicated'},
       {type:'decision',label:'Inter-dept Issue Escalated?',
         yes:[
-          {type:'gap',     label:'No Formal Cross-dept Review Mechanism', sub:'Issues resolved reactively — no structured forum'},
+          {type:'gap',     label:'No Formal Cross-dept Review Mechanism', sub:'Issues resolved reactively  -  no structured forum'},
           {type:'process', label:'Issue Addressed Directly by GM'},
         ],
         no:[{type:'process', label:'Normal Operations Continue'}]
@@ -880,9 +882,9 @@ const DEPTS = [
   },
 ];
 
-// ═══════════════════════════════════
+// -----------------------------------
 // BUILD DEPT NAV
-// ═══════════════════════════════════
+// -----------------------------------
 function buildDeptNav() {
   let html = '<div class="dn-label">All Departments</div>';
   DEPTS.forEach(d => {
@@ -904,7 +906,7 @@ function selectDept(id) {
   disp.innerHTML = `
     <div class="flow-hdr">
       <h2 style="color:${d.color}">${d.full}</h2>
-      <p>Directed To: ${d.directedTo} &nbsp;·&nbsp; ${d.gaps} process gaps</p>
+      <p>Directed To: ${d.directedTo} &nbsp;.&nbsp; ${d.gaps} process gaps</p>
     </div>
     <div class="flow-svg-wrap" id="flowSvg"></div>
     <div class="gap-section" id="gapSection"></div>`;
@@ -913,20 +915,20 @@ function selectDept(id) {
   const gapList = [];
   function collectGaps(steps) {
     for (const s of steps) {
-      if (s.type === 'gap') gapList.push(s.label + (s.sub ? ' — ' + s.sub : ''));
+      if (s.type === 'gap') gapList.push(s.label + (s.sub ? '  -  ' + s.sub : ''));
       if (s.yes) collectGaps(s.yes);
       if (s.no)  collectGaps(s.no);
     }
   }
   collectGaps(d.steps);
   const sec = document.getElementById('gapSection');
-  sec.innerHTML = `<div class="gap-section-title">⚠ Process Gaps in This Department (${gapList.length})</div>
-    <div class="gap-pills">${gapList.map(g=>`<div class="gap-pill">⚠ ${g}</div>`).join('')}</div>`;
+  sec.innerHTML = `<div class="gap-section-title">(!) Process Gaps in This Department (${gapList.length})</div>
+    <div class="gap-pills">${gapList.map(g=>`<div class="gap-pill">(!) ${g}</div>`).join('')}</div>`;
 }
 
-// ═══════════════════════════════════
+// -----------------------------------
 // MASTER CHART
-// ═══════════════════════════════════
+// -----------------------------------
 function buildMasterChart() {
   const laneH = 118, labelW = 162, colW = 210, nCols = 10;
   const svgW = labelW + nCols * colW + 30;
@@ -934,7 +936,7 @@ function buildMasterChart() {
     {color:'#D4A55B', label:'Patient\nCoordinator'},
     {color:'#5B9BD5', label:'Front\nOffice'},
     {color:'#D4895A', label:'Logistics'},
-    {color:'#48B07C', label:'Lab · Quality\nPhlebotomy'},
+    {color:'#48B07C', label:'Lab . Quality\nPhlebotomy'},
     {color:'#B07FD4', label:'Insurance\nCoordinator'},
     {color:'#D45B7A', label:'Accounts'},
     {color:'#5AAED4', label:'Business\nDevelopment'},
@@ -950,27 +952,27 @@ function buildMasterChart() {
     [0,1,'Identify\nCategory','B2B / Ins / B2C',false],
     [0,1,'Register\nPatient','Invoice + form',false],
     [1,2,'Schedule\nCollection','Home/Trudoc/B2B',false],
-    [1,2,'Dispatch Before\nEligibility','⚠ Gap',true],
+    [1,2,'Dispatch Before\nEligibility','(!) Gap',true],
     [1,1,'Pre-approval\n+ Eligibility','Coverage check',false],
-    [1,1,'No Approval\nFollow-up SLA','⚠ Gap',true],
+    [1,1,'No Approval\nFollow-up SLA','(!) Gap',true],
     [2,3,'Sample\nAccession','TRF + QC check',false],
     [2,3,'STAT / Routine\nProcessing','Multi-analyser',false],
-    [3,3,'No STAT TAT\nKPI Defined','⚠ Gap',true],
+    [3,3,'No STAT TAT\nKPI Defined','(!) Gap',true],
     [3,3,'Results Approved\nby Pathologist','LIS dispatch',false],
     [4,4,'ICD + Docs\nPre-audit','Tariff verified',false],
     [4,4,'Claim Submitted\n& Monitored','7-day target',false],
-    [5,4,'No Denial Code\nRegister','⚠ Gap',true],
+    [5,4,'No Denial Code\nRegister','(!) Gap',true],
     [5,4,'Resubmission\nManaged','30-day window',false],
     [5,5,'Tally Invoicing\nfrom MIS','B2C + insurance',false],
-    [5,5,'MIS Dependency\nNo Contingency','⚠ Gap',true],
+    [5,5,'MIS Dependency\nNo Contingency','(!) Gap',true],
     [6,6,'B2B Client\nRelationship','Volume tracking',false],
-    [6,6,'No CRM\nPipeline','⚠ Gap',true],
-    [7,7,'Reagent GRN\n+ Inventory','Temp · lot · expiry',false],
-    [7,7,'No Reorder\nSystem Alert','⚠ Gap',true],
+    [6,6,'No CRM\nPipeline','(!) Gap',true],
+    [7,7,'Reagent GRN\n+ Inventory','Temp . lot . expiry',false],
+    [7,7,'No Reorder\nSystem Alert','(!) Gap',true],
     [8,8,'IT Support\nAll 10 Depts','ADHICS v2',false],
-    [8,8,'No SLA Matrix\nor Ticketing','⚠ Gap',true],
-    [9,9,'Ops + Financial\nReview','P&L · workforce',false],
-    [9,9,'No Cross-dept\nReview','⚠ Gap',true],
+    [8,8,'No SLA Matrix\nor Ticketing','(!) Gap',true],
+    [9,9,'Ops + Financial\nReview','P&L . workforce',false],
+    [9,9,'No Cross-dept\nReview','(!) Gap',true],
   ];
   const colLabels = ['Contact &\nRegistration','Collection &\nLogistics','Lab\nProcessing','Insurance\nClaims','Billing &\nAccounts','Business\nDevelopment','Purchase &\nInventory','IT\nSystems','Operations\nManagement',''];
 
@@ -1059,10 +1061,10 @@ function buildMasterChart() {
 
   // Handoff arrows (dashed curves between dept lanes)
   const handoffs = [
-    [1,0, 1,1, 'FO → Dispatch'],
+    [1,0, 1,1, 'FO -> Dispatch'],
     [1,2, 2,2, 'Sample Drop'],
     [1,1, 1,2, 'Reg. Data'],
-    [3,3, 4,4, 'Result → Claim'],
+    [3,3, 4,4, 'Result -> Claim'],
     [5,4, 5,5, 'MIS Report'],
     [6,6, 1,2, 'New Client'],
   ];
@@ -1079,64 +1081,46 @@ function buildMasterChart() {
   });
 
   s += `<rect x="0" y="${svgH-30}" width="${svgW}" height="30" fill="rgba(0,0,0,0.03)" rx="0 0 14 14"/>`;
-  s += `<text x="12" y="${svgH-10}" font-family="Nunito,sans-serif" font-size="10" font-weight="600" fill="#9C8A78">APML Master Operational Flowchart · 10 Departments · All Cross-departmental Touchpoints · ⚠ = Identified Process Gap</text>`;
+  s += `<text x="12" y="${svgH-10}" font-family="Nunito,sans-serif" font-size="10" font-weight="600" fill="#9C8A78">APML Master Operational Flowchart . 10 Departments . All Cross-departmental Touchpoints . (!) = Identified Process Gap</text>`;
   s += '</svg>';
   document.getElementById('masterChart').innerHTML = s;
 }
 
-// ═══════════════════════════════════
+// -----------------------------------
 // PATIENT CHART
-// ═══════════════════════════════════
+// -----------------------------------
 function buildPatientChart() {
   const stages = [
-    {n:1, label:'CONTACT', owner:'Patient Coordinator
-/ Front Office', color:'#D4A55B',
+    {n:1, label:'CONTACT', owner:'Patient Coordinator\n/ Front Office', color:'#D4A55B',
      patient:'Patient phones, WhatsApps or walks in to request a test or home collection',
      gap:'Handover boundary between Patient Coordinator and Front Office is undefined', wait:false},
-    {n:2, label:'ELIGIBILITY
-& REGISTRATION', owner:'Front Office', color:'#5B9BD5',
-     patient:'Patient waits — sometimes for several days — for insurance pre-approval before proceeding',
-     gap:'No follow-up SLA — patient has no visibility on where their approval stands', wait:true, waitLabel:'Wait for
-pre-approval'},
-    {n:3, label:'COLLECTION
-SCHEDULED', owner:'Logistics', color:'#D4895A',
+    {n:2, label:'ELIGIBILITY\n& REGISTRATION', owner:'Front Office', color:'#5B9BD5',
+     patient:'Patient waits  -  sometimes for several days  -  for insurance pre-approval before proceeding',
+     gap:'No follow-up SLA  -  patient has no visibility on where their approval stands', wait:true, waitLabel:'Wait for\npre-approval'},
+    {n:3, label:'COLLECTION\nSCHEDULED', owner:'Logistics', color:'#D4895A',
      patient:'Patient receives a home visit appointment time or is directed to the clinic',
      gap:null, wait:false},
-    {n:4, label:'SAMPLE
-COLLECTED', owner:'Logistics
-(Phlebotomist)', color:'#D4895A',
-     patient:'Phlebotomist arrives (home) or patient presents at clinic — sample taken — waiting for results begins',
-     gap:'Patient has no visibility on test progress or expected report time', wait:true, waitLabel:'Wait for
-results (TAT)'},
-    {n:5, label:'LAB
-PROCESSING', owner:'Lab · Quality
-Phlebotomy', color:'#48B07C',
-     patient:'Patient is completely unaware of processing — no update is sent proactively',
+    {n:4, label:'SAMPLE\nCOLLECTED', owner:'Logistics\n(Phlebotomist)', color:'#D4895A',
+     patient:'Phlebotomist arrives (home) or patient presents at clinic  -  sample taken  -  waiting for results begins',
+     gap:'Patient has no visibility on test progress or expected report time', wait:true, waitLabel:'Wait for\nresults (TAT)'},
+    {n:5, label:'LAB\nPROCESSING', owner:'Lab . Quality\nPhlebotomy', color:'#48B07C',
+     patient:'Patient is completely unaware of processing  -  no update is sent proactively',
      gap:'No patient-facing TAT update mechanism exists', wait:false},
-    {n:6, label:'RESULTS
-APPROVED', owner:'Lab · Quality', color:'#48B07C',
-     patient:'Results verified by lab tech and approved by pathologist — dispatched via LIS',
+    {n:6, label:'RESULTS\nAPPROVED', owner:'Lab . Quality', color:'#48B07C',
+     patient:'Results verified by lab tech and approved by pathologist  -  dispatched via LIS',
      gap:null, wait:false},
-    {n:7, label:'REPORT
-DELIVERED', owner:'Front Office
-/ Patient Coord.', color:'#5B9BD5',
+    {n:7, label:'REPORT\nDELIVERED', owner:'Front Office\n/ Patient Coord.', color:'#5B9BD5',
      patient:'Patient receives final report via portal, WhatsApp, or must call to collect it',
-     gap:'No proactive result notification — patient must call or follow up themselves', wait:false},
-    {n:8, label:'BILLING
-& CO-PAY', owner:'Accounts
-/ Insurance', color:'#D45B7A',
-     patient:'Patient asked to pay co-payment or full invoice — amount sometimes only revealed after test',
-     gap:'Co-pay amount often communicated after tests are done — not at registration stage', wait:false},
-    {n:9, label:'FEEDBACK
-COLLECTED', owner:'Patient
-Coordinator', color:'#D4A55B',
-     patient:'Patient may or may not receive a satisfaction survey — depends on staff remembering to send it',
-     gap:'Survey sent inconsistently — no follow-up action loop on negative responses', wait:false},
-    {n:10,label:'RE-TEST
-/ RETURN', owner:'Patient Coord.
-/ BDE', color:'#5AAED4',
-     patient:'Returning patient restarts the journey — their repeat visit is not tracked or incentivised',
-     gap:'No B2C retention tracking — repeat visit rate is unknown', wait:false},
+     gap:'No proactive result notification  -  patient must call or follow up themselves', wait:false},
+    {n:8, label:'BILLING\n& CO-PAY', owner:'Accounts\n/ Insurance', color:'#D45B7A',
+     patient:'Patient asked to pay co-payment or full invoice  -  amount sometimes only revealed after test',
+     gap:'Co-pay amount often communicated after tests are done  -  not at registration stage', wait:false},
+    {n:9, label:'FEEDBACK\nCOLLECTED', owner:'Patient\nCoordinator', color:'#D4A55B',
+     patient:'Patient may or may not receive a satisfaction survey  -  depends on staff remembering to send it',
+     gap:'Survey sent inconsistently  -  no follow-up action loop on negative responses', wait:false},
+    {n:10,label:'RE-TEST\n/ RETURN', owner:'Patient Coord.\n/ BDE', color:'#5AAED4',
+     patient:'Returning patient restarts the journey  -  their repeat visit is not tracked or incentivised',
+     gap:'No B2C retention tracking  -  repeat visit rate is unknown', wait:false},
   ];
 
   const boxW = 162, boxH = 96, patH = 70, gapH = 62;
@@ -1215,7 +1199,7 @@ Coordinator', color:'#D4A55B',
       s += `<rect x="${x+3}" y="${gapY-4}" width="${boxW-6}" height="${gapH+8}" rx="10" fill="#FEF3C7"/>`;
       s += `<rect x="${x+3}" y="${gapY-4}" width="${boxW-6}" height="16" rx="9" fill="#D49840"/>`;
       s += `<rect x="${x+3}" y="${gapY+4}" width="${boxW-6}" height="8" fill="#D49840"/>`;
-      s += `<text x="${cx}" y="${gapY+7}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="900" fill="white">⚠ GAP</text>`;
+      s += `<text x="${cx}" y="${gapY+7}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="900" fill="white">(!) GAP</text>`;
       const gwords = st.gap.split(' ');
       const glines = []; let gc = '';
       for (const w of gwords) {
@@ -1229,7 +1213,7 @@ Coordinator', color:'#D4A55B',
         s += `<text x="${cx}" y="${gtY+li*11}" text-anchor="middle" font-family="Nunito Sans,sans-serif" font-size="9.5" font-weight="600" fill="#5A2E00">${ln}</text>`;
       });
     } else {
-      s += `<text x="${cx}" y="${gapY+gapH/2}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="14" fill="#D0C8BC">—</text>`;
+      s += `<text x="${cx}" y="${gapY+gapH/2}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="14" fill="#D0C8BC"> - </text>`;
     }
 
     // Wait badge
@@ -1261,7 +1245,7 @@ Coordinator', color:'#D4A55B',
     {fill:'white',stroke:'#5B9BD5',text:'Process Stage (color = dept)'},
     {fill:'rgba(90,174,212,0.12)',stroke:'rgba(90,174,212,0.3)',text:'Patient Experience'},
     {fill:'#FEF3C7',stroke:'#D49840',text:'Gap / Patient Pain Point'},
-    {fill:'#FEF3C7',stroke:'#D49840',text:'⚠ = Patient Wait Period'},
+    {fill:'#FEF3C7',stroke:'#D49840',text:'(!) = Patient Wait Period'},
   ];
   legItems.forEach((li, idx) => {
     const lx = leftPad + 10 + idx * 230;
@@ -1273,9 +1257,9 @@ Coordinator', color:'#D4A55B',
   document.getElementById('patientChart').innerHTML = s;
 }
 
-// ═══════════════════════════════════
+// -----------------------------------
 // QUESTIONS & GAPS TAB
-// ═══════════════════════════════════
+// -----------------------------------
 const Q_ACCURACY = [
   {c:'#5B9BD5', n:'FO', q:'Are there additional approval steps in Front Office not shown? (E.g. physician prescription requirements for certain insurers?)'},
   {c:'#48B07C', n:'Lab', q:'Are there manual recording steps between machine output and pathologist sign-off not captured in the current flow?'},
@@ -1291,7 +1275,7 @@ const Q_ACCURACY = [
 
 const Q_KPI = [
   'What KPIs are currently tracked and formally reported monthly at management level?',
-  'Is patient satisfaction currently measured in any form — NPS, Google reviews, or internal survey?',
+  'Is patient satisfaction currently measured in any form  -  NPS, Google reviews, or internal survey?',
   'What is the current average insurance claim approval cycle time from submission to payment receipt?',
   'What is the current sample rejection rate? Which sample type has the highest rejection frequency?',
   'How many active B2B clients does APML currently serve, and what is the monthly B2B sample volume?',
@@ -1309,9 +1293,9 @@ const GAP_CHECKS = [
   {dept:'Logistics', color:'#D4895A', title:'Trudoc Dispatch Before Eligibility', q:'How frequently are Trudoc logistics dispatched before eligibility is fully confirmed by reception?'},
   {dept:'Insurance', color:'#B07FD4', title:'No 7-Day Submission Alert', q:'Has the 7-day internal submission target ever been missed? Was it detected, and what happened?'},
   {dept:'Insurance', color:'#B07FD4', title:'No Denial Code Register', q:'Are denial codes ever discussed in team meetings? Is there any informal tracking happening?'},
-  {dept:'Accounts', color:'#D45B7A', title:'MIS Dependency — No Contingency', q:'Has MIS downtime ever caused an invoicing delay? What was the workaround used at the time?'},
+  {dept:'Accounts', color:'#D45B7A', title:'MIS Dependency  -  No Contingency', q:'Has MIS downtime ever caused an invoicing delay? What was the workaround used at the time?'},
   {dept:'IT', color:'#52AF82', title:'No SLA Matrix', q:'How are urgent vs. non-urgent IT issues currently distinguished without a formal priority framework?'},
-  {dept:'BDE', color:'#5AAED4', title:'No CRM Pipeline Tracker', q:'Where is client pipeline data currently stored — Excel, WhatsApp notes, individual memory?'},
+  {dept:'BDE', color:'#5AAED4', title:'No CRM Pipeline Tracker', q:'Where is client pipeline data currently stored  -  Excel, WhatsApp notes, individual memory?'},
   {dept:'Patient Coord.', color:'#D4A55B', title:'Handover from FO Undefined', q:'At what exact point does the Patient Coordinator take over from Front Office in a B2C patient journey?'},
   {dept:'Patient Coord.', color:'#D4A55B', title:'No B2C Retention Tracking', q:'How many B2C patients approximately return for follow-up tests within 3 months? Is this tracked at all?'},
 ];
@@ -1356,7 +1340,7 @@ function buildQuestions() {
   cl.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">` +
     GAP_CHECKS.map((g,i) => `
     <div class="gap-check-item" onclick="toggleCheck(this)">
-      <div class="gap-check-box" id="cb${i}">□</div>
+      <div class="gap-check-box" id="cb${i}"></div>
       <div class="gap-check-body">
         <div class="gap-check-dept" style="color:${g.color}">${g.dept}</div>
         <div class="gap-check-title">${g.title}</div>
@@ -1384,24 +1368,23 @@ function buildQuestions() {
 function toggleCheck(el) {
   const box = el.querySelector('.gap-check-box');
   box.classList.toggle('checked');
-  box.textContent = box.classList.contains('checked') ? '✓' : '□';
+  box.textContent = box.classList.contains('checked') ? 'v' : '';
 }
 
-// ═══════════════════════════════════
+// -----------------------------------
 // INIT
-// ═══════════════════════════════════
-function runInit() {
-  try { buildDeptNav(); } catch(e) { console.error('buildDeptNav failed:', e); }
-  try { buildMasterChart(); } catch(e) { console.error('buildMasterChart failed:', e); }
-  try { buildPatientChart(); } catch(e) { console.error('buildPatientChart failed:', e); }
-  try { buildQuestions(); } catch(e) { console.error('buildQuestions failed:', e); }
-  try { selectDept('fo'); } catch(e) { console.error('selectDept failed:', e); }
-}
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', runInit);
-} else {
-  runInit();
-}
+// -----------------------------------
+(function(){
+  function run(){
+    try{buildDeptNav();}catch(e){console.error('buildDeptNav:',e);}
+    try{buildMasterChart();}catch(e){console.error('buildMasterChart:',e);}
+    try{buildPatientChart();}catch(e){console.error('buildPatientChart:',e);}
+    try{buildQuestions();}catch(e){console.error('buildQuestions:',e);}
+    try{selectDept('fo');}catch(e){console.error('selectDept:',e);}
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
 </script>
 </body>
 </html>
