@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APML Flowcharts — Claymorphism</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #E8DDD0;
+  --bg2: #DDD0C3;
+  --surface: #FAF6F0;
+  --surface2: #F2EBE1;
+  --border: #D5C9B8;
+  --text: #2D2118;
+  --text2: #5C4A38;
+  --text3: #9C8A78;
+  --fo:#5B9BD5; --lab:#48B07C; --log:#D4895A; --pur:#9B7BD4;
+  --acc:#D45B7A; --ins:#B07FD4; --it:#52AF82;
+  --bde:#5AAED4; --pc:#D4A55B; --gm:#5B7FAF;
+  --gap-main:#F4C06A; --gap-shadow:#D4A048; --gap-text:#6A3E00;
+  --crit:#F0A0B4;
+  --clay-radius: 18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Nunito Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(0,0,0,0.04) 0%, transparent 50%);
+}
+
+/* ── CLAY MIXIN ── */
+.clay {
+  border-radius: var(--clay-radius);
+  box-shadow:
+    0 6px 0 rgba(0,0,0,0.12),
+    0 10px 24px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.75),
+    inset 0 -1px 0 rgba(0,0,0,0.06);
+}
+.clay-sm {
+  border-radius: 12px;
+  box-shadow:
+    0 3px 0 rgba(0,0,0,0.1),
+    0 6px 14px rgba(0,0,0,0.07),
+    inset 0 1px 0 rgba(255,255,255,0.7);
+}
+.clay-inset {
+  border-radius: var(--clay-radius);
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.1),
+    inset 0 1px 3px rgba(0,0,0,0.07);
+  background: rgba(0,0,0,0.04);
+}
+
+/* ── HEADER ── */
+.hdr {
+  height: 62px;
+  background: var(--surface);
+  display: flex; align-items: center;
+  padding: 0 28px; gap: 14px;
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.08), 0 8px 20px rgba(0,0,0,0.06),
+              inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family:'Nunito',sans-serif; font-size:15px; font-weight:800;
+  color: var(--text);
+}
+.logo-sq {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, #D45B7A 0%, #5B7FAF 100%);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size:10px; font-weight:900; color:#fff; letter-spacing:.06em;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.2), 0 6px 12px rgba(0,0,0,0.12),
+              inset 0 1px 0 rgba(255,255,255,0.4);
+}
+.hdr-sep{width:1px;height:22px;background:var(--border);margin:0 4px;}
+.hdr-sub{font-size:11.5px;color:var(--text3);font-family:'Nunito',sans-serif;font-weight:600;}
+.hdr-badge {
+  margin-left:auto; display:flex; gap:8px; align-items:center;
+}
+.badge {
+  font-size:11px; font-weight:700; font-family:'Nunito',sans-serif;
+  padding:4px 12px; border-radius:100px;
+  background:var(--surface2);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.05),
+              inset 0 1px 0 rgba(255,255,255,0.8);
+  color: var(--text2);
+}
+.badge.amber{background:#FEF3C7; color:#854D0E;
+  box-shadow: 0 2px 0 rgba(180,120,0,0.15), 0 4px 8px rgba(180,120,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8);}
+.badge.red{background:#FEE2E2; color:#991B1B;
+  box-shadow: 0 2px 0 rgba(180,0,0,0.12), 0 4px 8px rgba(180,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.8);}
+
+/* ── TABS ── */
+.tabs-wrap {
+  display: flex; gap: 10px;
+  padding: 18px 28px 0;
+  background: var(--bg);
+}
+.tab {
+  padding: 11px 22px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; border-radius: 14px 14px 0 0;
+  color: var(--text3);
+  background: var(--surface2);
+  box-shadow: 0 3px 0 rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.05),
+              inset 0 1px 0 rgba(255,255,255,0.7);
+  transition: all .18s; user-select:none;
+  border: none;
+}
+.tab:hover{color:var(--text2); background:var(--surface);}
+.tab.active {
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.1), 0 -2px 0 rgba(0,0,0,0), 0 8px 16px rgba(0,0,0,0.06),
+              inset 0 1px 0 rgba(255,255,255,0.9);
+  transform: translateY(-2px);
+}
+
+/* ── CONTENT ── */
+.tab-content-wrap {
+  background: var(--surface);
+  border-radius: 0 18px 18px 18px;
+  margin: 0 28px;
+  padding: 28px;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.1), 0 12px 32px rgba(0,0,0,0.07),
+              inset 0 1px 0 rgba(255,255,255,0.8);
+  margin-bottom: 40px;
+}
+.view{display:none;}
+.view.active{display:block; animation: fadeUp .22s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── DEPT NAV ── */
+.flow-layout{display:flex;gap:20px;align-items:flex-start;}
+.dept-nav {
+  width:176px; flex-shrink:0;
+  background:var(--surface2);
+  border-radius:var(--clay-radius);
+  padding:10px 8px;
+  position:sticky; top:80px;
+  max-height:calc(100vh - 110px); overflow-y:auto;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.08), 0 8px 20px rgba(0,0,0,0.06),
+              inset 0 1px 0 rgba(255,255,255,0.7),
+              inset 0 -1px 0 rgba(0,0,0,0.04);
+}
+.dn-label {
+  font-family:'Nunito',sans-serif; font-size:9.5px; font-weight:800;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:var(--text3); padding:8px 10px 4px;
+}
+.dn-item {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 10px; cursor:pointer;
+  font-family:'Nunito Sans',sans-serif;
+  font-size:12px; font-weight:600; color:var(--text2);
+  border-radius:12px; margin-bottom:2px;
+  transition:all .14s;
+}
+.dn-item:hover{background:rgba(255,255,255,0.6); color:var(--text);}
+.dn-item.active {
+  background:#fff; color:var(--text);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.06),
+              inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.dn-pip{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.dn-item.active .dn-pip{box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.dn-gaps {
+  margin-left:auto; font-family:'Nunito',sans-serif;
+  font-size:9px; font-weight:800;
+  background:#FEF3C7; color:#854D0E;
+  border-radius:100px; padding:1px 6px;
+  box-shadow:0 1px 0 rgba(180,120,0,0.15);
+}
+
+/* ── FLOW DISPLAY ── */
+.flow-display {
+  flex:1; overflow:auto;
+  background:var(--bg);
+  border-radius:var(--clay-radius);
+  padding:24px;
+  box-shadow: inset 0 3px 10px rgba(0,0,0,0.08),
+              inset 0 1px 3px rgba(0,0,0,0.05);
+}
+.flow-hdr{margin-bottom:20px;}
+.flow-hdr h2{
+  font-family:'Nunito',sans-serif;
+  font-size:18px;font-weight:800;margin-bottom:4px;
+}
+.flow-hdr p{font-size:11.5px;color:var(--text3);font-weight:600;}
+.flow-svg-wrap{display:flex;justify-content:center;overflow-x:auto;padding:8px 0;}
+
+/* ── LEGEND ── */
+.legend {
+  display:flex;flex-wrap:wrap;gap:10px;
+  padding:14px 18px; margin-bottom:20px;
+  background:var(--surface2);
+  border-radius:14px;
+  box-shadow:0 2px 0 rgba(0,0,0,0.06),0 4px 10px rgba(0,0,0,0.04),
+             inset 0 1px 0 rgba(255,255,255,0.7);
+}
+.leg-item{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:var(--text2);}
+.leg-node{height:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;}
+
+/* ── GAP PILLS ── */
+.gap-section{margin-top:20px;}
+.gap-section-title{
+  font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;
+  color:#854D0E;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.gap-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.gap-pill {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:6px 12px;
+  background:#FEF3C7; color:#854D0E;
+  border-radius:100px;
+  font-family:'Nunito',sans-serif; font-size:11px; font-weight:700;
+  box-shadow:0 2px 0 rgba(180,120,0,0.18),0 4px 10px rgba(180,120,0,0.08),
+             inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+/* ── CHART WRAPPERS ── */
+.chart-wrap{
+  background:var(--bg);
+  border-radius:var(--clay-radius);
+  padding:24px;
+  overflow:auto;
+  box-shadow:inset 0 3px 10px rgba(0,0,0,0.08),inset 0 1px 3px rgba(0,0,0,0.05);
+}
+.chart-hdr{margin-bottom:20px;}
+.chart-hdr h2{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;margin-bottom:4px;}
+.chart-hdr p{font-size:11.5px;color:var(--text3);font-weight:600;}
+
+/* ── QUESTIONS TAB ── */
+.q-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.q-card {
+  background:var(--surface2);
+  border-radius:var(--clay-radius); padding:20px;
+  box-shadow:0 4px 0 rgba(0,0,0,0.08),0 8px 18px rgba(0,0,0,0.06),
+             inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.q-card-title{
+  font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.q-card-icon{
+  width:28px;height:28px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;
+  box-shadow:0 2px 0 rgba(0,0,0,0.12),0 4px 8px rgba(0,0,0,0.07),
+             inset 0 1px 0 rgba(255,255,255,0.5);
+}
+.q-item{
+  display:flex;gap:9px;margin-bottom:10px;
+  font-size:12.5px;font-weight:500;color:var(--text2);line-height:1.5;
+  align-items:flex-start;
+}
+.q-num{
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:11px;
+  color:#fff;min-width:20px;height:20px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0; margin-top:1px;
+  box-shadow:0 1px 0 rgba(0,0,0,0.15),0 2px 4px rgba(0,0,0,0.1);
+}
+.gap-check-item{
+  display:flex;gap:10px;padding:10px 12px;
+  background:#fff;border-radius:12px;margin-bottom:8px;
+  box-shadow:0 2px 0 rgba(0,0,0,0.06),0 4px 10px rgba(0,0,0,0.04),
+             inset 0 1px 0 rgba(255,255,255,0.9);
+  align-items:flex-start;
+}
+.gap-check-item:hover{box-shadow:0 3px 0 rgba(0,0,0,0.08),0 6px 14px rgba(0,0,0,0.06);}
+.gap-check-box{
+  width:20px;height:20px;border-radius:6px;
+  border:2px solid #D4A048; background:#FEF3C7;
+  flex-shrink:0;cursor:pointer;margin-top:1px;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,0.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#854D0E;font-weight:800;
+  transition:all .15s;
+}
+.gap-check-box.checked{background:#48B07C;border-color:#2A8050;color:#fff;
+  box-shadow:0 1px 0 rgba(0,0,0,0.15),inset 0 1px 2px rgba(0,0,0,0.1);}
+.gap-check-body{flex:1;}
+.gap-check-dept{
+  font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;
+}
+.gap-check-title{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.gap-check-q{font-size:11.5px;color:var(--text2);line-height:1.45;}
+
+@media(max-width:900px){
+  .q-grid{grid-template-columns:1fr;}
+  .flow-layout{flex-direction:column;}
+  .dept-nav{width:100%;position:static;max-height:none;}
+  .tabs-wrap{padding:12px 14px 0;gap:6px;}
+  .tab{padding:9px 14px;font-size:12px;}
+  .tab-content-wrap{margin:0 14px;padding:16px;}
+}
+
+@media (max-width: 900px) {
+  .tabs-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
+  .tab { flex-shrink: 0; min-height: 44px; }
+  .flow-layout { flex-direction: column; gap: 10px; }
+  .dept-nav { width: 100%; position: static; max-height: none;
+    display: flex; flex-direction: row; flex-wrap: nowrap;
+    overflow-x: auto; gap: 6px; padding: 8px; }
+  .dn-label { display: none; }
+  .dn-item { flex-shrink: 0; white-space: nowrap; border-radius: 100px;
+    padding: 8px 14px; margin-bottom: 0; }
+  .flow-display { padding: 14px; }
+  .q-grid { grid-template-columns: 1fr; }
+  .q-card-wide { grid-column: span 1; }
+  #gap-checklist > div { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .hdr-sub { display: none; }
+  .tab { padding: 9px 10px; font-size: 11.5px; }
+  .tab-content-wrap { margin: 0 6px; padding: 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo">
+    <div class="logo-sq">APML</div>
+    APML Flowcharts
+  </div>
+  <div class="hdr-sep"></div>
+  <div class="hdr-sub">Operations · Gaps · Patient Journey · Discovery</div>
+  <div class="hdr-badge">
+    <span class="badge">10 depts</span>
+    <span class="badge amber">⚠ 36 gaps</span>
+    <span class="badge red">🔴 8 critical</span>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tab active" onclick="showView('dept',this)">🔷 Department Flows</div>
+  <div class="tab" onclick="showView('master',this)">🔶 Master Flowchart</div>
+  <div class="tab" onclick="showView('patient',this)">💙 Patient Journey</div>
+  <div class="tab" onclick="showView('questions',this)">📋 Questions &amp; Gaps</div>
+</div>
+
+<div class="tab-content-wrap">
+
+  <!-- TAB 1: DEPT FLOWS -->
+  <div class="view active" id="view-dept">
+    <div class="legend">
+      <div class="leg-item">
+        <div class="leg-node" style="width:44px;background:#48B07C;color:#fff;box-shadow:0 2px 0 rgba(0,0,0,0.15)">Start</div> Start
+      </div>
+      <div class="leg-item">
+        <div class="leg-node" style="width:52px;background:#F5F0EA;color:#2D2118;box-shadow:0 2px 0 rgba(0,0,0,0.1)">Process</div> Process
+      </div>
+      <div class="leg-item">
+        <svg width="22" height="18" viewBox="0 0 22 18"><polygon points="11,1 21,9 11,17 1,9" fill="#FDE68A" stroke="#D4A048" stroke-width="1.5"/></svg> Decision
+      </div>
+      <div class="leg-item">
+        <div class="leg-node" style="width:48px;background:#F4C06A;color:#6A3E00;box-shadow:0 2px 0 rgba(180,120,0,0.2)">⚠ Gap</div> Process Gap
+      </div>
+      <div class="leg-item">
+        <div class="leg-node" style="width:56px;background:#B8D8F0;color:#1A4A6A;box-shadow:0 2px 0 rgba(0,100,180,0.15)">→ Handoff</div> Dept Handoff
+      </div>
+      <div class="leg-item">
+        <div class="leg-node" style="width:40px;background:#7B9DC4;color:#fff;box-shadow:0 2px 0 rgba(0,0,0,0.15)">End</div> End
+      </div>
+    </div>
+    <div class="flow-layout">
+      <div class="dept-nav" id="deptNav"></div>
+      <div class="flow-display" id="flowDisplay">
+        <div class="flow-hdr"><h2>Select a Department</h2><p>Choose from the list on the left</p></div>
+        <div class="flow-svg-wrap" id="flowSvg"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: MASTER -->
+  <div class="view" id="view-master">
+    <div class="chart-hdr">
+      <h2>Master Operational Flowchart</h2>
+      <p>All 10 departments · End-to-end operational flow · Cross-departmental touchpoints</p>
+    </div>
+    <div class="chart-wrap"><div id="masterChart"></div></div>
+  </div>
+
+  <!-- TAB 3: PATIENT -->
+  <div class="view" id="view-patient">
+    <div class="chart-hdr">
+      <h2>Patient Perspective Flowchart</h2>
+      <p>Complete patient journey from first contact to follow-up · Gaps that affect patient experience</p>
+    </div>
+    <div class="chart-wrap"><div id="patientChart"></div></div>
+  </div>
+
+  <!-- TAB 4: QUESTIONS & GAPS -->
+  <div class="view" id="view-questions">
+    <div class="q-grid">
+
+      <div class="q-card">
+        <div class="q-card-title">
+          <div class="q-card-icon" style="background:#DBEAFE;">🔍</div>
+          Flow Accuracy Questions
+        </div>
+        <div id="q-accuracy"></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-card-title">
+          <div class="q-card-icon" style="background:#FEF3C7;">📊</div>
+          Data &amp; KPI Questions
+        </div>
+        <div id="q-kpi"></div>
+      </div>
+
+      <div class="q-card" style="grid-column:span 2">
+        <div class="q-card-title">
+          <div class="q-card-icon" style="background:#FEE2E2;">✅</div>
+          Gap Validation Checklist — Confirm or Deny Each Gap
+        </div>
+        <div id="gap-checklist"></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-card-title">
+          <div class="q-card-icon" style="background:#DCFCE7;">🚀</div>
+          Improvement Priority Questions
+        </div>
+        <div id="q-priority"></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-card-title">
+          <div class="q-card-icon" style="background:#F3E8FF;">⚖️</div>
+          Compliance &amp; Risk Questions
+        </div>
+        <div id="q-compliance"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- tab-content-wrap -->
+
+<script>
+// ═══════════════════════════════════
+// TABS
+// ═══════════════════════════════════
+function showView(id, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+// ═══════════════════════════════════
+// CLAY SVG ENGINE
+// ═══════════════════════════════════
+const C = { W:660, vG:28, dS:44, bO:156, bW:172 };
+C.cx = C.W / 2;
+
+// Clay color palette per node type
+const CLAY = {
+  process:  { main:'#F5F0EA', shadow:'#C8C0B4', text:'#2D2118', sub:'#6C5A48', hl:'rgba(255,255,255,0.6)' },
+  start:    { main:'#5DC494', shadow:'#38A070', text:'#fff',     sub:'rgba(255,255,255,0.85)', hl:'rgba(255,255,255,0.4)' },
+  end:      { main:'#7B9DC4', shadow:'#5A7AA8', text:'#fff',     sub:'rgba(255,255,255,0.8)', hl:'rgba(255,255,255,0.35)' },
+  gap:      { main:'#F4C06A', shadow:'#D49840', text:'#5A2E00', sub:'#7A4E10', hl:'rgba(255,255,255,0.45)' },
+  handoff:  { main:'#B8D8F0', shadow:'#88B0D8', text:'#1A3A5A', sub:'#3A5A7A', hl:'rgba(255,255,255,0.55)' },
+  crit:     { main:'#F4A8BC', shadow:'#D0809C', text:'#5A0018', sub:'#8A2040', hl:'rgba(255,255,255,0.4)' },
+  decision: { main:'#FDE68A', shadow:'#D8C060', text:'#5A3800', hl:'rgba(255,255,255,0.45)' },
+};
+
+let els = [];
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function wrap(text, maxCh) {
+  const words = String(text).split(' ');
+  const lines = []; let cur = '';
+  for (const w of words) {
+    const test = cur ? cur + ' ' + w : w;
+    if (test.length > maxCh && cur) { lines.push(cur); cur = w; }
+    else cur = test;
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+function nodeH(label, sub, w) {
+  const cpl = Math.floor(w / 7.4);
+  const lLines = wrap(label, cpl).length;
+  const sLines = sub ? wrap(sub, cpl + 2).length : 0;
+  const LH = 16, sLH = 13, PAD = 18;
+  return Math.max(52, PAD + lLines * LH + (sLines ? sLines * sLH + 6 : 0));
+}
+
+function drawClayNode(step, cx, y, w) {
+  w = w || 210;
+  const hw = w / 2;
+  const prefix = step.type==='gap' ? '⚠ ' : step.type==='handoff' ? '→ ' : '';
+  const label = prefix + step.label;
+  const col = CLAY[step.type] || CLAY.process;
+  const cpl = Math.floor(w / 7.4);
+  const lLines = wrap(label, cpl);
+  const sLines = step.sub ? wrap(step.sub, cpl + 2) : [];
+  const LH = 16, sLH = 13, PAD = 18;
+  const h = Math.max(52, PAD + lLines.length * LH + (sLines.length ? sLines.length * sLH + 6 : 0));
+  const isRound = step.type === 'start' || step.type === 'end';
+  const rx = isRound ? h / 2 : 13;
+
+  // Shadow layer
+  els.push(`<rect x="${cx-hw+1}" y="${y+5}" width="${w-2}" height="${h}" rx="${rx}" fill="${col.shadow}" opacity="0.7"/>`);
+  // Main body
+  els.push(`<rect x="${cx-hw}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${col.main}"/>`);
+  // Top highlight
+  const hlH = Math.min(h * 0.45, 22);
+  const hlRx = Math.min(rx, 11);
+  els.push(`<rect x="${cx-hw+4}" y="${y+4}" width="${w-8}" height="${hlH}" rx="${hlRx}" fill="${col.hl}"/>`);
+
+  // Label text
+  const totalTextH = lLines.length * LH + (sLines.length ? sLines.length * sLH + 6 : 0);
+  const textStartY = y + (h - totalTextH) / 2 + LH * 0.7;
+  lLines.forEach((ln, i) => {
+    els.push(`<text x="${cx}" y="${textStartY + i*LH}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="12" font-weight="800" fill="${col.text}">${esc(ln)}</text>`);
+  });
+  if (sLines.length) {
+    const subY = textStartY + lLines.length * LH + 4;
+    sLines.forEach((ln, i) => {
+      els.push(`<text x="${cx}" y="${subY + i*sLH}" text-anchor="middle" font-family="Nunito Sans,sans-serif" font-size="10.5" font-weight="600" fill="${col.sub}">${esc(ln)}</text>`);
+    });
+  }
+  return h;
+}
+
+function arrowDown(x, y1, y2) {
+  els.push(`<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2-6}" stroke="#B0A090" stroke-width="2" stroke-linecap="round" marker-end="url(#arr)"/>`);
+}
+function hLine(x1, x2, y) {
+  els.push(`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#B0A090" stroke-width="2" stroke-linecap="round"/>`);
+}
+function vLine(x, y1, y2) {
+  els.push(`<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="#B0A090" stroke-width="2" stroke-linecap="round"/>`);
+}
+
+function renderDecision(step, cx, y) {
+  const dh = C.dS;
+  const col = CLAY.decision;
+  // Shadow
+  els.push(`<polygon points="${cx},${y+4} ${cx+dh},${y+dh+4} ${cx},${y+2*dh+4} ${cx-dh},${y+dh+4}" fill="${col.shadow}" opacity="0.6"/>`);
+  // Main diamond
+  els.push(`<polygon points="${cx},${y} ${cx+dh},${y+dh} ${cx},${y+2*dh} ${cx-dh},${y+dh}" fill="${col.main}"/>`);
+  // Highlight
+  els.push(`<polygon points="${cx},${y+2} ${cx+dh*0.6},${y+dh*0.6+2} ${cx},${y+dh*0.9+2} ${cx-dh*0.6},${y+dh*0.6+2}" fill="${col.hl}" opacity="0.7"/>`);
+  // Text
+  const dlines = wrap(step.label, 14);
+  const dlh = 13;
+  const dTextY = y + dh - (dlines.length - 1) * dlh / 2;
+  dlines.forEach((ln, i) => {
+    els.push(`<text x="${cx}" y="${dTextY + i*dlh}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="11" font-weight="800" fill="${col.text}">${esc(ln)}</text>`);
+  });
+
+  const decY = y + 2*dh;
+  const yesX = cx - C.bO, noX = cx + C.bO;
+  const branchY = decY + C.vG;
+
+  // Horizontal lines
+  hLine(cx - dh, yesX, y + dh);
+  hLine(cx + dh, noX,  y + dh);
+  // Labels
+  els.push(`<text x="${yesX}" y="${y+dh-8}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10" font-weight="800" fill="#38A070">${esc(step.yesLabel||'Yes')}</text>`);
+  els.push(`<text x="${noX}"  y="${y+dh-8}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10" font-weight="800" fill="#D45B7A">${esc(step.noLabel||'No')}</text>`);
+  // Down arrows
+  arrowDown(yesX, y + dh, branchY);
+  arrowDown(noX,  y + dh, branchY);
+
+  // Render branches
+  let yesY = branchY;
+  (step.yes||[]).forEach((s, i, arr) => {
+    const h = drawClayNode(s, yesX, yesY, C.bW);
+    if (i < arr.length-1) { arrowDown(yesX, yesY+h, yesY+h+C.vG); yesY += h+C.vG; }
+    else yesY += h;
+  });
+  let noY = branchY;
+  (step.no||[]).forEach((s, i, arr) => {
+    const h = drawClayNode(s, noX, noY, C.bW);
+    if (i < arr.length-1) { arrowDown(noX, noY+h, noY+h+C.vG); noY += h+C.vG; }
+    else noY += h;
+  });
+
+  const mergeY = Math.max(yesY, noY) + C.vG;
+  vLine(yesX, yesY, mergeY);
+  vLine(noX,  noY,  mergeY);
+  hLine(yesX, cx-2, mergeY);
+  hLine(noX,  cx+2, mergeY);
+  els.push(`<circle cx="${cx}" cy="${mergeY}" r="4" fill="#B0A090"/>`);
+  return mergeY + C.vG;
+}
+
+function renderFlow(steps) {
+  let y = 30;
+  for (let i = 0; i < steps.length; i++) {
+    const s = steps[i], last = i === steps.length-1;
+    if (s.type === 'decision') {
+      y = renderDecision(s, C.cx, y);
+      if (!last) { arrowDown(C.cx, y-C.vG+4, y); }
+    } else {
+      const h = drawClayNode(s, C.cx, y);
+      if (!last) { arrowDown(C.cx, y+h, y+h+C.vG); y += h+C.vG; }
+      else y += h;
+    }
+  }
+  return y;
+}
+
+function makeSVG(steps) {
+  els = [];
+  const finalY = renderFlow(steps);
+  const svgH = finalY + 30;
+  const defs = `<defs>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#B0A090"/>
+    </marker>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5F0E8"/>
+      <stop offset="100%" stop-color="#EDE5D8"/>
+    </linearGradient>
+  </defs>`;
+  return `<svg width="${C.W}" height="${svgH}" xmlns="http://www.w3.org/2000/svg">
+    ${defs}
+    <rect width="${C.W}" height="${svgH}" fill="url(#bg-grad)" rx="12"/>
+    ${els.join('')}
+  </svg>`;
+}
+
+// ═══════════════════════════════════
+// DEPT FLOW DATA
+// ═══════════════════════════════════
+const DEPTS = [
+  { id:'fo',  label:'Front Office', full:'Front Office & Reception', color:'#5B9BD5', directedTo:'Reception Supervisor / Shift Lead', gaps:4,
+    steps:[
+      {type:'start',    label:'Patient Arrives'},
+      {type:'process',  label:'Identify Patient Category', sub:'B2B · Daman Insurance · Other Insurance · B2C'},
+      {type:'decision', label:'Insurance Patient?',
+        yes:[
+          {type:'process', label:'Eligibility & Coverage Check', sub:'Services covered · exclusions · waiting period verified'},
+          {type:'process', label:'Pre-approval Initiated if Required'},
+          {type:'gap',     label:'No SLA for Approval Follow-up', sub:'Frequency is ad hoc — no target defined'},
+        ],
+        no:[{type:'process', label:'Direct Registration', sub:'B2C walk-in or B2B standing order'}]
+      },
+      {type:'process', label:'Patient Registered in System', sub:'Invoice + request form generated'},
+      {type:'process', label:'Manage All Communications', sub:'Calls · WhatsApp messages · email queries'},
+      {type:'gap',     label:'No TAT Breach Alert', sub:'TAT updated in tracker but no escalation trigger exists'},
+      {type:'decision',label:'Patient Complaint Received?',
+        yes:[{type:'gap', label:'No Resolution SLA Defined', sub:'No timeline or formal escalation path documented'}],
+        no: [{type:'process', label:'Continue Normal Flow'}]
+      },
+      {type:'decision',label:'Trudoc or Clinic Request?',
+        yes:[{type:'handoff', label:'Eligibility Confirmed → Hand to Logistics', sub:'Patient details forwarded via WhatsApp group'}],
+        no: [{type:'process',  label:'In-clinic Sample Collection'}]
+      },
+      {type:'gap',  label:'Survey Data Not Analysed', sub:'Source-of-visit survey collected but reporting absent'},
+      {type:'end',  label:'Registration & Communication Complete'},
+    ]
+  },
+  { id:'lab', label:'Lab · Quality · Phlebotomy', full:'Lab, Quality, Phlebotomy & Microbiology', color:'#48B07C', directedTo:'Quality Manager', gaps:5,
+    steps:[
+      {type:'start',   label:'Sample Arrives at Accession'},
+      {type:'process', label:'Lab Tech Acknowledges in Sample Register', sub:'Sample number + collection time noted'},
+      {type:'process', label:'TRF Verified + Sample Quality Check', sub:'Acceptance or rejection criteria applied'},
+      {type:'decision',label:'Sample Acceptable?', yesLabel:'Accept', noLabel:'Reject',
+        yes:[
+          {type:'process', label:'Centrifuge + Segregate', sub:'Clinical Pathology · Microbiology · Other'},
+          {type:'process', label:'Barcode Generated + Sample Acknowledged'},
+        ],
+        no:[
+          {type:'gap',    label:'Rejection Re-collection Not Logged', sub:'Client notified but re-collection outcome untracked'},
+          {type:'end',    label:'Sample Rejected — Client Notified'},
+        ]
+      },
+      {type:'decision',label:'Urgent STAT Sample?', yesLabel:'STAT', noLabel:'Routine',
+        yes:[
+          {type:'gap',     label:'No STAT TAT Target Defined', sub:'Urgent samples have no measurable KPI'},
+          {type:'process', label:'STAT Processing Mode on Analyser'},
+        ],
+        no:[{type:'process', label:'Routine Loading to Analyser', sub:'AU480 · ACCESS 2 · MAGLUMI X3 · Mindray · Sysmex'}]
+      },
+      {type:'process', label:'Test Results Generated'},
+      {type:'decision',label:'Abnormal Result?',
+        yes:[
+          {type:'gap',     label:'No Pathologist Escalation Matrix', sub:'No path if part-time pathologist unavailable'},
+          {type:'process', label:'Smear or Slide Review Flagged'},
+        ],
+        no:[{type:'process', label:'Lab Tech Verification Completed'}]
+      },
+      {type:'process', label:'Results Approved by Pathologist'},
+      {type:'decision',label:'In-house or Outsource?', yesLabel:'In-house', noLabel:'Outsource',
+        yes:[{type:'process', label:'Results Dispatched via LIS or Manual'}],
+        no: [
+          {type:'gap',     label:'No Outsource TAT Tracker', sub:'Referral lab turnaround not formally monitored'},
+          {type:'handoff', label:'Sent to Referral Lab with Urgent Note'},
+        ]
+      },
+      {type:'gap', label:'Phlebotomy Competency Not Reviewed', sub:'Rejection rates not linked to phlebotomist performance data'},
+      {type:'end', label:'Results Available for Dispatch'},
+    ]
+  },
+  { id:'log', label:'Logistics', full:'Logistics', color:'#D4895A', directedTo:'Logistics Supervisor', gaps:4,
+    steps:[
+      {type:'start',   label:'Collection Request Received'},
+      {type:'decision',label:'Collection Type?', yesLabel:'Home/Trudoc', noLabel:'B2B',
+        yes:[
+          {type:'process', label:'Supervisor Assigns Phlebotomist + Route', sub:'Kit prepared · collection time confirmed with patient'},
+          {type:'process', label:'Patient Visited · ID Verified · Sample Collected'},
+          {type:'gap',     label:'No Registration Confirmation Loop', sub:'Details sent via WhatsApp — no acknowledgement check'},
+        ],
+        no:[
+          {type:'process', label:'Client Notifies Sample Readiness', sub:'Via B2B WhatsApp group — team confirms collection'},
+          {type:'process', label:'Driver Travels with Box + Driver Form'},
+          {type:'gap',     label:'Paper-only Driver Form', sub:'No digital trail — duplicate safeguard absent'},
+          {type:'process', label:'Sample Handover Signed by Client MC Rep'},
+        ]
+      },
+      {type:'decision',label:'Trudoc Eligibility Confirmed Before Dispatch?',
+        yes:[{type:'process', label:'Eligibility Confirmed — Dispatch Authorised'}],
+        no: [{type:'gap',     label:'Dispatch Before Eligibility Confirmed', sub:'Risk of ineligible collection and wasted trip'}]
+      },
+      {type:'gap',     label:'No Driver Backup Coverage Matrix', sub:'No documented reliever plan when primary driver absent'},
+      {type:'handoff', label:'Sample to Lab Accession + Reception', sub:'Registration completed by Front Office team'},
+      {type:'end',     label:'Collection Complete'},
+    ]
+  },
+  { id:'ins', label:'Insurance Coordinator', full:'Insurance Coordinator', color:'#B07FD4', directedTo:'Insurance Coordinator', gaps:4,
+    steps:[
+      {type:'start',   label:'Claim Process Initiated'},
+      {type:'process', label:'Pending Approvals + Queries Reviewed with Reception'},
+      {type:'process', label:'ICD Code & Medical Necessity Validated', sub:'Primary + secondary diagnosis · tariff verified'},
+      {type:'process', label:'Documentation Completeness Check', sub:'Claim forms · signatures · lab reports confirmed'},
+      {type:'decision',label:'Within 7-Day Internal Target?', yesLabel:'On Time', noLabel:'Delayed',
+        yes:[{type:'process', label:'Claim Submitted to Insurer via EMR'}],
+        no: [{type:'gap',     label:'No Alert for 7-Day Target Breach', sub:'No system-level notification when deadline is approaching'}]
+      },
+      {type:'process', label:'Claim Status Monitored via EMR Insurance Menu'},
+      {type:'decision',label:'Claim Denied?',
+        yes:[
+          {type:'gap',     label:'No Denial Code Register Maintained', sub:'Trend analysis not possible — patterns invisible'},
+          {type:'process', label:'Corrective Documents Updated'},
+          {type:'gap',     label:'Resubmission Tracker Not Formalised', sub:'Risk of missing the 30-day resubmission window'},
+        ],
+        no:[{type:'process', label:'Claim Approved — Moved to Reconciliation'}]
+      },
+      {type:'process', label:'Weekly MIS + Monthly Rejection Report to Accounts'},
+      {type:'gap',  label:'No Standard Patient Communication Script', sub:'Co-pay and coverage details communicated inconsistently'},
+      {type:'end',  label:'Insurance Cycle Complete'},
+    ]
+  },
+  { id:'pur', label:'Purchase & Inventory', full:'Purchase & Inventory', color:'#9B7BD4', directedTo:'Purchase / Inventory In-charge', gaps:4,
+    steps:[
+      {type:'start',   label:'Daily Morning Review'},
+      {type:'process', label:'Consumable Requests Reviewed from Emails', sub:'Sample count cross-checked against email requests'},
+      {type:'process', label:'Consumables Issued per FIFO / FEFO', sub:'Delivery note prepared + signed by client + filed'},
+      {type:'gap',     label:'Excel Log Only — No System Integration', sub:'Manual daily request log — no reconciliation audit trail'},
+      {type:'process', label:'Weekly Stock Check — Main + Sub-store', sub:'Transfer registered · low stock triggers purchase request'},
+      {type:'process', label:'LPO Raised + Sent to Suppliers', sub:'Approved by Operations Manager before sending'},
+      {type:'process', label:'GRN Entered on Delivery', sub:'Quantity · temperature · lot number · expiry date verified'},
+      {type:'decision',label:'Item Rejected on Delivery?',
+        yes:[{type:'gap', label:'Rejection Not Recorded Against Supplier', sub:'No vendor scorecard — repeat failures undetected'}],
+        no: [{type:'process', label:'Stock Stored and Accepted'}]
+      },
+      {type:'gap',  label:'Reorder Level Has No System Alert', sub:'Manual threshold — no automated stock alert trigger'},
+      {type:'gap',  label:'Temperature Log Not Linked to GRN', sub:'Daily log maintained but not tied to acceptance criteria'},
+      {type:'end',  label:'Inventory Cycle Complete'},
+    ]
+  },
+  { id:'acc', label:'Accounts', full:'Accounts', color:'#D45B7A', directedTo:'Accounts In-charge', gaps:3,
+    steps:[
+      {type:'start',   label:'Daily Accounts Activities'},
+      {type:'process', label:'Core Lab Invoicing in Tally Based on MIS'},
+      {type:'gap',     label:'MIS Dependency — No Contingency Plan', sub:'If MIS is delayed or unavailable invoicing chain stalls'},
+      {type:'process', label:'B2C Collections Recorded in Tally'},
+      {type:'process', label:'Receipts Issued + Register Maintained'},
+      {type:'gap',     label:'Receipt Register Not Standardised', sub:'Format varies across shifts — inconsistency risk'},
+      {type:'process', label:'Daily Card Reconciliation Performed'},
+      {type:'gap',     label:'No Sign-off Authority for Card Reconciliation', sub:'No documented sign-off or escalation for mismatches'},
+      {type:'process', label:'Monthly Client-wise Invoice Verification'},
+      {type:'handoff', label:'Insurance MIS + Rejection Reports Received', sub:'From Insurance Coordinator — weekly and monthly'},
+      {type:'end',     label:'Accounts Reconciliation Complete'},
+    ]
+  },
+  { id:'it',  label:'IT Operations', full:'IT Operations', color:'#52AF82', directedTo:'IT In-charge', gaps:3,
+    steps:[
+      {type:'start',   label:'IT Request Received'},
+      {type:'process', label:'Channel: Email · Phone · WhatsApp · Direct'},
+      {type:'gap',     label:'No SLA Matrix — No Priority Triage', sub:'No defined response time per request category'},
+      {type:'decision',label:'Dept Type?', yesLabel:'Lab/Clinical', noLabel:'Admin/Support',
+        yes:[{type:'process', label:'Machine Config · Middleware · LIS · Backup', sub:'ADHICS v2 compliance + security monitoring'}],
+        no: [{type:'process', label:'Reception · Accounts · HR · Marketing', sub:'EMR · Tally · Keka · printer · email support'}]
+      },
+      {type:'process', label:'Branch Support — Remote or On-site', sub:'Wi-Fi · EMR · Printer · Biometric · Security'},
+      {type:'process', label:'Monthly Cybersecurity Awareness Training'},
+      {type:'process', label:'Third-party Vendor Coordination', sub:'EMR · Keka · CRM · web dev teams'},
+      {type:'process', label:'Issue Resolved + Documented'},
+      {type:'gap',     label:'No Helpdesk Ticketing System', sub:'No platform to log, track, or audit requests and resolutions'},
+      {type:'end',     label:'IT Support Complete'},
+    ]
+  },
+  { id:'bde', label:'Business Development', full:'Business Development', color:'#5AAED4', directedTo:'BDE / BDE Lead', gaps:4,
+    steps:[
+      {type:'start',   label:'Market Research + Lead Identification'},
+      {type:'process', label:'Competitor Pricing + Panel Analysis', sub:'Clients segmented: hospitals · clinics · corporates'},
+      {type:'process', label:'Cold Calls · Field Visits · Referrals'},
+      {type:'process', label:'Initial Meeting — Lab Profile Presented', sub:'Accreditations · test menu · TAT · home collection'},
+      {type:'process', label:'Customised Proposal Prepared + Presented'},
+      {type:'decision',label:'Negotiation Required?',
+        yes:[{type:'gap', label:'No Discount Approval Path Defined', sub:'Non-standard terms approved without clear authority'}],
+        no: [{type:'process', label:'Standard Terms Agreed and Signed'}]
+      },
+      {type:'process', label:'Agreement Signed + Documents Collected', sub:'Trade licence · DOH licence · VAT certificate'},
+      {type:'process', label:'Collection Schedule Established'},
+      {type:'gap',     label:'Onboarding Handover Not Documented', sub:'No checklist for IT setup and operations coordination'},
+      {type:'handoff', label:'Handover to IT · Logistics · Operations', sub:'Portal access · collection routes · test mapping'},
+      {type:'process', label:'Weekly Client Follow-up + Issue Resolution'},
+      {type:'gap',     label:'No CRM — Pipeline Not Tracked', sub:'Sales activity and conversion rates are not measurable'},
+      {type:'gap',     label:'No Re-engagement Process for Volume Drops', sub:'Declining client accounts go undetected'},
+      {type:'end',     label:'Client Onboarded + Retained'},
+    ]
+  },
+  { id:'pc',  label:'Patient Coordinator', full:'Patient Coordinator (Dedicated Role)', color:'#D4A55B', directedTo:'Patient Coordinator', gaps:3,
+    steps:[
+      {type:'start',   label:'B2C Patient Contact Initiated'},
+      {type:'gap',     label:'Handover from Front Office Undefined', sub:'No formal protocol — role boundary not documented'},
+      {type:'process', label:'Patient Ownership Assumed', sub:'Phone · WhatsApp · callback management'},
+      {type:'process', label:'Test Package Selection Assisted'},
+      {type:'process', label:'Appointment + Collection Prep Managed'},
+      {type:'process', label:'Result Notification Sent to Patient'},
+      {type:'process', label:'Billing Dispute + Co-pay Query Resolved'},
+      {type:'process', label:'Post-visit Feedback Collected', sub:'Digital · verbal · WhatsApp survey'},
+      {type:'gap',     label:'Feedback Not Formally Actioned', sub:'No review-and-action loop — recurring issues persist'},
+      {type:'decision',label:'Poor Experience Reported?',
+        yes:[{type:'process', label:'Service Recovery Initiated', sub:'No formal protocol — handled ad hoc currently'}],
+        no: [{type:'process', label:'Normal Follow-up Completed'}]
+      },
+      {type:'gap',     label:'No B2C Retention Tracking', sub:'Repeat-visit rate not monitored — attrition invisible'},
+      {type:'end',     label:'Patient Experience Managed'},
+    ]
+  },
+  { id:'gm',  label:'General Manager', full:'General Manager (Operations)', color:'#5B7FAF', directedTo:'General Manager / Operations Head', gaps:2,
+    steps:[
+      {type:'start',   label:'GM Operational Oversight'},
+      {type:'process', label:'Financial + Operational Review', sub:'P&L · revenue per client · AR ageing · cash flow'},
+      {type:'process', label:'Staffing + Workforce Decisions Approved'},
+      {type:'process', label:'Policy + Pricing Updates Approved + Communicated'},
+      {type:'decision',label:'Inter-dept Issue Escalated?',
+        yes:[
+          {type:'gap',     label:'No Formal Cross-dept Review Mechanism', sub:'Issues resolved reactively — no structured forum'},
+          {type:'process', label:'Issue Addressed Directly by GM'},
+        ],
+        no:[{type:'process', label:'Normal Operations Continue'}]
+      },
+      {type:'process', label:'New Service or Test Capability Evaluated'},
+      {type:'process', label:'Vendor + Partner Relationships Managed'},
+      {type:'decision',label:'Compliance Review Scheduled?',
+        yes:[{type:'gap', label:'Compliance Ownership Not Formalised at GM', sub:'No monthly review checkpoint assigned'}],
+        no: [{type:'process', label:'Deferred to Next Period'}]
+      },
+      {type:'process', label:'Business Growth + Market Strategy'},
+      {type:'end',     label:'Strategic + Operational Oversight Complete'},
+    ]
+  },
+];
+
+// ═══════════════════════════════════
+// BUILD DEPT NAV
+// ═══════════════════════════════════
+function buildDeptNav() {
+  let html = '<div class="dn-label">All Departments</div>';
+  DEPTS.forEach(d => {
+    html += `<div class="dn-item" data-id="${d.id}" onclick="selectDept('${d.id}')">
+      <span class="dn-pip" style="background:${d.color};box-shadow:0 1px 4px ${d.color}80"></span>
+      ${d.label}
+      <span class="dn-gaps">${d.gaps}</span>
+    </div>`;
+  });
+  document.getElementById('deptNav').innerHTML = html;
+}
+
+function selectDept(id) {
+  const d = DEPTS.find(x => x.id === id);
+  if (!d) return;
+  document.querySelectorAll('.dn-item').forEach(e => e.classList.remove('active'));
+  document.querySelector(`.dn-item[data-id="${id}"]`).classList.add('active');
+  const disp = document.getElementById('flowDisplay');
+  disp.innerHTML = `
+    <div class="flow-hdr">
+      <h2 style="color:${d.color}">${d.full}</h2>
+      <p>Directed To: ${d.directedTo} &nbsp;·&nbsp; ${d.gaps} process gaps</p>
+    </div>
+    <div class="flow-svg-wrap" id="flowSvg"></div>
+    <div class="gap-section" id="gapSection"></div>`;
+  document.getElementById('flowSvg').innerHTML = makeSVG(d.steps);
+  // Gap pills
+  const gapList = [];
+  function collectGaps(steps) {
+    for (const s of steps) {
+      if (s.type === 'gap') gapList.push(s.label + (s.sub ? ' — ' + s.sub : ''));
+      if (s.yes) collectGaps(s.yes);
+      if (s.no)  collectGaps(s.no);
+    }
+  }
+  collectGaps(d.steps);
+  const sec = document.getElementById('gapSection');
+  sec.innerHTML = `<div class="gap-section-title">⚠ Process Gaps in This Department (${gapList.length})</div>
+    <div class="gap-pills">${gapList.map(g=>`<div class="gap-pill">⚠ ${g}</div>`).join('')}</div>`;
+}
+
+// ═══════════════════════════════════
+// MASTER CHART
+// ═══════════════════════════════════
+function buildMasterChart() {
+  const laneH = 118, labelW = 162, colW = 210, nCols = 10;
+  const svgW = labelW + nCols * colW + 30;
+  const rows = [
+    {color:'#D4A55B', label:'Patient\nCoordinator'},
+    {color:'#5B9BD5', label:'Front\nOffice'},
+    {color:'#D4895A', label:'Logistics'},
+    {color:'#48B07C', label:'Lab · Quality\nPhlebotomy'},
+    {color:'#B07FD4', label:'Insurance\nCoordinator'},
+    {color:'#D45B7A', label:'Accounts'},
+    {color:'#5AAED4', label:'Business\nDevelopment'},
+    {color:'#9B7BD4', label:'Purchase &\nInventory'},
+    {color:'#52AF82', label:'IT Operations'},
+    {color:'#5B7FAF', label:'General\nManager'},
+  ];
+  const svgH = rows.length * laneH + 66;
+  const nodes = [
+    // [col, row, label, sub, gap]
+    [0,0,'B2C Patient\nOwnership','Phone/WhatsApp\nWalk-in',false],
+    [0,0,'Handover\nUndefined','Gap vs FO',true],
+    [0,1,'Identify\nCategory','B2B / Ins / B2C',false],
+    [0,1,'Register\nPatient','Invoice + form',false],
+    [1,2,'Schedule\nCollection','Home/Trudoc/B2B',false],
+    [1,2,'Dispatch Before\nEligibility','⚠ Gap',true],
+    [1,1,'Pre-approval\n+ Eligibility','Coverage check',false],
+    [1,1,'No Approval\nFollow-up SLA','⚠ Gap',true],
+    [2,3,'Sample\nAccession','TRF + QC check',false],
+    [2,3,'STAT / Routine\nProcessing','Multi-analyser',false],
+    [3,3,'No STAT TAT\nKPI Defined','⚠ Gap',true],
+    [3,3,'Results Approved\nby Pathologist','LIS dispatch',false],
+    [4,4,'ICD + Docs\nPre-audit','Tariff verified',false],
+    [4,4,'Claim Submitted\n& Monitored','7-day target',false],
+    [5,4,'No Denial Code\nRegister','⚠ Gap',true],
+    [5,4,'Resubmission\nManaged','30-day window',false],
+    [5,5,'Tally Invoicing\nfrom MIS','B2C + insurance',false],
+    [5,5,'MIS Dependency\nNo Contingency','⚠ Gap',true],
+    [6,6,'B2B Client\nRelationship','Volume tracking',false],
+    [6,6,'No CRM\nPipeline','⚠ Gap',true],
+    [7,7,'Reagent GRN\n+ Inventory','Temp · lot · expiry',false],
+    [7,7,'No Reorder\nSystem Alert','⚠ Gap',true],
+    [8,8,'IT Support\nAll 10 Depts','ADHICS v2',false],
+    [8,8,'No SLA Matrix\nor Ticketing','⚠ Gap',true],
+    [9,9,'Ops + Financial\nReview','P&L · workforce',false],
+    [9,9,'No Cross-dept\nReview','⚠ Gap',true],
+  ];
+  const colLabels = ['Contact &\nRegistration','Collection &\nLogistics','Lab\nProcessing','Insurance\nClaims','Billing &\nAccounts','Business\nDevelopment','Purchase &\nInventory','IT\nSystems','Operations\nManagement',''];
+
+  let s = `<svg width="${svgW}" height="${svgH}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="marr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#B0A090"/>
+    </marker>
+    <linearGradient id="mbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDE8DF"/>
+      <stop offset="100%" stop-color="#E4DDD2"/>
+    </linearGradient>
+  </defs>
+  <rect width="${svgW}" height="${svgH}" fill="url(#mbg)" rx="14"/>`;
+
+  // Column headers
+  for (let c = 0; c < nCols; c++) {
+    const x = labelW + c * colW;
+    const hfill = c % 2 === 0 ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.15)';
+    s += `<rect x="${x}" y="0" width="${colW}" height="56" fill="${hfill}"/>`;
+    if (colLabels[c]) {
+      const lines = colLabels[c].split('\n');
+      lines.forEach((ln, i) => {
+        s += `<text x="${x+colW/2}" y="${18+i*16}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10" font-weight="800" fill="#5C4A38">${ln}</text>`;
+      });
+    }
+    if (c > 0) s += `<line x1="${x}" y1="0" x2="${x}" y2="${svgH}" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>`;
+  }
+
+  // Lane rows
+  rows.forEach((r, i) => {
+    const y = 56 + i * laneH;
+    const stripe = i % 2 === 0 ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.1)';
+    s += `<rect x="0" y="${y}" width="${svgW}" height="${laneH}" fill="${stripe}"/>`;
+    s += `<rect x="0" y="${y}" width="5" height="${laneH}" fill="${r.color}"/>`;
+    s += `<rect x="0" y="${y}" width="${labelW}" height="${laneH}" fill="${r.color}18"/>`;
+    // Label
+    const lines = r.label.split('\n');
+    const ly = y + laneH/2 - (lines.length-1)*9;
+    lines.forEach((ln, li) => {
+      s += `<text x="${labelW/2}" y="${ly+li*18}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="11" font-weight="800" fill="${r.color}">${ln}</text>`;
+    });
+    s += `<line x1="0" y1="${y+laneH}" x2="${svgW}" y2="${y+laneH}" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>`;
+  });
+
+  // Column dividers top area
+  s += `<line x1="${labelW}" y1="0" x2="${labelW}" y2="${svgH}" stroke="rgba(0,0,0,0.1)" stroke-width="1.5"/>`;
+
+  // Nodes
+  const nodeW = colW - 18, nodeH2 = laneH / 2 - 14;
+  nodes.forEach(([col, row, lbl, sub, isGap]) => {
+    const x = labelW + col * colW + 9;
+    const ry = 56 + row * laneH;
+    // Two nodes per cell - determine sub-position
+    const sameCell = nodes.filter(n => n[0]===col && n[1]===row);
+    const idx = sameCell.indexOf(sameCell.find(n => n===nodes.find(nn=>nn[0]===col&&nn[1]===row&&nn[2]===lbl)));
+    const subIdx = sameCell.findIndex(n => n[2] === lbl);
+    const ny = ry + 8 + subIdx * (laneH / 2 - 2);
+    const nh = laneH / 2 - 14;
+    const fillC = isGap ? '#F4C06A' : 'rgba(255,255,255,0.85)';
+    const strokeC = isGap ? '#D49840' : 'rgba(0,0,0,0.08)';
+    const textC = isGap ? '#5A2E00' : '#2D2118';
+    const subC = isGap ? '#7A4E10' : '#5C4A38';
+    const shadow = isGap ? '#D49840' : 'rgba(0,0,0,0.1)';
+
+    s += `<rect x="${x+1}" y="${ny+3}" width="${nodeW-2}" height="${nh}" rx="8" fill="${shadow}" opacity="0.5"/>`;
+    s += `<rect x="${x}" y="${ny}" width="${nodeW}" height="${nh}" rx="8" fill="${fillC}" stroke="${strokeC}" stroke-width="1"/>`;
+    s += `<rect x="${x+3}" y="${ny+3}" width="${nodeW-6}" height="${nh*0.4}" rx="6" fill="rgba(255,255,255,0.35)"/>`;
+
+    const lblLines = lbl.split('\n');
+    const subLines2 = sub ? sub.split('\n') : [];
+    const hasSubText = subLines2.length > 0 && !isGap;
+    const totalTH = lblLines.length * 13 + (hasSubText ? subLines2.length * 11 + 3 : 0);
+    const textY = ny + (nh - totalTH) / 2 + 10;
+
+    lblLines.forEach((ln, li) => {
+      s += `<text x="${x+nodeW/2}" y="${textY+li*13}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="${isGap?9.5:10}" font-weight="800" fill="${textC}">${ln}</text>`;
+    });
+    if (hasSubText) {
+      const sy = textY + lblLines.length * 13 + 2;
+      subLines2.forEach((ln, li) => {
+        s += `<text x="${x+nodeW/2}" y="${sy+li*11}" text-anchor="middle" font-family="Nunito Sans,sans-serif" font-size="9" font-weight="600" fill="${subC}">${ln}</text>`;
+      });
+    }
+  });
+
+  // Handoff arrows (dashed curves between dept lanes)
+  const handoffs = [
+    [1,0, 1,1, 'FO → Dispatch'],
+    [1,2, 2,2, 'Sample Drop'],
+    [1,1, 1,2, 'Reg. Data'],
+    [3,3, 4,4, 'Result → Claim'],
+    [5,4, 5,5, 'MIS Report'],
+    [6,6, 1,2, 'New Client'],
+  ];
+  handoffs.forEach(([c1,r1,c2,r2,lbl]) => {
+    const x1 = labelW + c1*colW + colW/2;
+    const y1 = 56 + (r1+1)*laneH - 6;
+    const x2 = labelW + c2*colW + colW/2;
+    const y2 = 56 + r2*laneH + 6;
+    if (c1 === c2) {
+      s += `<path d="M${x1} ${y1} C${x1} ${y1+20},${x2} ${y2-20},${x2} ${y2}" fill="none" stroke="#B0A090" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#marr)"/>`;
+    } else {
+      s += `<path d="M${x1} ${y1} Q${(x1+x2)/2} ${(y1+y2)/2-20},${x2} ${y2}" fill="none" stroke="#B0A090" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#marr)"/>`;
+    }
+  });
+
+  s += `<rect x="0" y="${svgH-30}" width="${svgW}" height="30" fill="rgba(0,0,0,0.03)" rx="0 0 14 14"/>`;
+  s += `<text x="12" y="${svgH-10}" font-family="Nunito,sans-serif" font-size="10" font-weight="600" fill="#9C8A78">APML Master Operational Flowchart · 10 Departments · All Cross-departmental Touchpoints · ⚠ = Identified Process Gap</text>`;
+  s += '</svg>';
+  document.getElementById('masterChart').innerHTML = s;
+}
+
+// ═══════════════════════════════════
+// PATIENT CHART
+// ═══════════════════════════════════
+function buildPatientChart() {
+  const stages = [
+    {n:1, label:'CONTACT', owner:'Patient Coordinator
+/ Front Office', color:'#D4A55B',
+     patient:'Patient phones, WhatsApps or walks in to request a test or home collection',
+     gap:'Handover boundary between Patient Coordinator and Front Office is undefined', wait:false},
+    {n:2, label:'ELIGIBILITY
+& REGISTRATION', owner:'Front Office', color:'#5B9BD5',
+     patient:'Patient waits — sometimes for several days — for insurance pre-approval before proceeding',
+     gap:'No follow-up SLA — patient has no visibility on where their approval stands', wait:true, waitLabel:'Wait for
+pre-approval'},
+    {n:3, label:'COLLECTION
+SCHEDULED', owner:'Logistics', color:'#D4895A',
+     patient:'Patient receives a home visit appointment time or is directed to the clinic',
+     gap:null, wait:false},
+    {n:4, label:'SAMPLE
+COLLECTED', owner:'Logistics
+(Phlebotomist)', color:'#D4895A',
+     patient:'Phlebotomist arrives (home) or patient presents at clinic — sample taken — waiting for results begins',
+     gap:'Patient has no visibility on test progress or expected report time', wait:true, waitLabel:'Wait for
+results (TAT)'},
+    {n:5, label:'LAB
+PROCESSING', owner:'Lab · Quality
+Phlebotomy', color:'#48B07C',
+     patient:'Patient is completely unaware of processing — no update is sent proactively',
+     gap:'No patient-facing TAT update mechanism exists', wait:false},
+    {n:6, label:'RESULTS
+APPROVED', owner:'Lab · Quality', color:'#48B07C',
+     patient:'Results verified by lab tech and approved by pathologist — dispatched via LIS',
+     gap:null, wait:false},
+    {n:7, label:'REPORT
+DELIVERED', owner:'Front Office
+/ Patient Coord.', color:'#5B9BD5',
+     patient:'Patient receives final report via portal, WhatsApp, or must call to collect it',
+     gap:'No proactive result notification — patient must call or follow up themselves', wait:false},
+    {n:8, label:'BILLING
+& CO-PAY', owner:'Accounts
+/ Insurance', color:'#D45B7A',
+     patient:'Patient asked to pay co-payment or full invoice — amount sometimes only revealed after test',
+     gap:'Co-pay amount often communicated after tests are done — not at registration stage', wait:false},
+    {n:9, label:'FEEDBACK
+COLLECTED', owner:'Patient
+Coordinator', color:'#D4A55B',
+     patient:'Patient may or may not receive a satisfaction survey — depends on staff remembering to send it',
+     gap:'Survey sent inconsistently — no follow-up action loop on negative responses', wait:false},
+    {n:10,label:'RE-TEST
+/ RETURN', owner:'Patient Coord.
+/ BDE', color:'#5AAED4',
+     patient:'Returning patient restarts the journey — their repeat visit is not tracked or incentivised',
+     gap:'No B2C retention tracking — repeat visit rate is unknown', wait:false},
+  ];
+
+  const boxW = 162, boxH = 96, patH = 70, gapH = 62;
+  const xGap = 26, leftPad = 44;
+  const svgW = leftPad + stages.length * (boxW + xGap) + 20;
+  const svgH = 530;
+  const topY = 56, midY = topY + boxH + 36, gapY = midY + patH + 28;
+
+  let s = `<svg width="${svgW}" height="${svgH}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="parr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#B0A090"/>
+    </marker>
+    <linearGradient id="pbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDE8DF"/>
+      <stop offset="100%" stop-color="#E0D9CF"/>
+    </linearGradient>
+  </defs>
+  <rect width="${svgW}" height="${svgH}" fill="url(#pbg)" rx="14"/>`;
+
+  // Row bands
+  const bands = [
+    {y:topY-12, h:boxH+24, fill:'rgba(255,255,255,0.35)', label:'Process Stage', lc:'#2D2118'},
+    {y:midY-10, h:patH+20, fill:'rgba(90,174,212,0.12)',  label:'Patient Experience', lc:'#1A4A7A'},
+    {y:gapY-10, h:gapH+20, fill:'rgba(244,192,106,0.15)', label:'Gap / Pain Point', lc:'#6A3E00'},
+  ];
+  bands.forEach(b => {
+    s += `<rect x="${leftPad-4}" y="${b.y}" width="${svgW - leftPad}" height="${b.h}" rx="10" fill="${b.fill}"/>`;
+    s += `<text x="${leftPad-8}" y="${b.y + b.h/2 + 4}" text-anchor="end" font-family="Nunito,sans-serif" font-size="9.5" font-weight="800" fill="${b.lc}" opacity="0.7">${b.label}</text>`;
+  });
+
+  stages.forEach((st, i) => {
+    const x = leftPad + i * (boxW + xGap);
+    const cx = x + boxW / 2;
+
+    // Stage number
+    s += `<rect x="${cx-14}" y="${topY-28}" width="28" height="18" rx="9" fill="${st.color}"/>`;
+    s += `<text x="${cx}" y="${topY-15}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10" font-weight="900" fill="white">${String(st.n).padStart(2,'0')}</text>`;
+
+    // Stage box shadow + main
+    s += `<rect x="${x+1}" y="${topY+4}" width="${boxW-2}" height="${boxH}" rx="12" fill="${st.color}60"/>`;
+    s += `<rect x="${x}" y="${topY}" width="${boxW}" height="${boxH}" rx="12" fill="white"/>`;
+    s += `<rect x="${x}" y="${topY}" width="${boxW}" height="28" rx="11" fill="${st.color}22"/>`;
+    s += `<rect x="${x}" y="${topY+21}" width="${boxW}" height="7" fill="${st.color}22"/>`;
+    // Top highlight
+    s += `<rect x="${x+4}" y="${topY+3}" width="${boxW-8}" height="12" rx="8" fill="rgba(255,255,255,0.5)"/>`;
+
+    // Stage title
+    const tlines = st.label.split('\n');
+    tlines.forEach((ln, li) => {
+      s += `<text x="${cx}" y="${topY+17+li*13}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10.5" font-weight="900" fill="${st.color}">${ln}</text>`;
+    });
+
+    // Owner
+    const olines = st.owner.split('\n');
+    olines.forEach((ln, li) => {
+      s += `<text x="${cx}" y="${topY+boxH-18+(li-Math.floor(olines.length/2))*12}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="700" fill="${st.color}CC">${ln}</text>`;
+    });
+
+    // Patient experience text
+    const pwords = st.patient.split(' ');
+    const plines = []; let pc = '';
+    for (const w of pwords) {
+      if ((pc+' '+w).trim().length > 24 && pc) { plines.push(pc); pc = w; }
+      else pc = pc ? pc+' '+w : w;
+    }
+    if (pc) plines.push(pc);
+    const ptH = plines.length * 12;
+    const ptY = midY + (patH - ptH) / 2 + 10;
+    plines.forEach((ln, li) => {
+      s += `<text x="${cx}" y="${ptY+li*12}" text-anchor="middle" font-family="Nunito Sans,sans-serif" font-size="10" font-weight="600" fill="#1A3A6A">${ln}</text>`;
+    });
+
+    // Gap box
+    if (st.gap) {
+      s += `<rect x="${x+3}" y="${gapY-4}" width="${boxW-6}" height="${gapH+8}" rx="10" fill="#FEF3C7"/>`;
+      s += `<rect x="${x+3}" y="${gapY-4}" width="${boxW-6}" height="16" rx="9" fill="#D49840"/>`;
+      s += `<rect x="${x+3}" y="${gapY+4}" width="${boxW-6}" height="8" fill="#D49840"/>`;
+      s += `<text x="${cx}" y="${gapY+7}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="900" fill="white">⚠ GAP</text>`;
+      const gwords = st.gap.split(' ');
+      const glines = []; let gc = '';
+      for (const w of gwords) {
+        if ((gc+' '+w).trim().length > 24 && gc) { glines.push(gc); gc = w; }
+        else gc = gc ? gc+' '+w : w;
+      }
+      if (gc) glines.push(gc);
+      const gtH = glines.length * 11;
+      const gtY = gapY + 22;
+      glines.forEach((ln, li) => {
+        s += `<text x="${cx}" y="${gtY+li*11}" text-anchor="middle" font-family="Nunito Sans,sans-serif" font-size="9.5" font-weight="600" fill="#5A2E00">${ln}</text>`;
+      });
+    } else {
+      s += `<text x="${cx}" y="${gapY+gapH/2}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="14" fill="#D0C8BC">—</text>`;
+    }
+
+    // Wait badge
+    if (st.wait && i < stages.length-1) {
+      const wlx = x + boxW + xGap/2;
+      const wly = topY + boxH/2;
+      const wlines = st.waitLabel.split('\n');
+      s += `<rect x="${wlx-34}" y="${wly-14}" width="68" height="${14+wlines.length*12}" rx="8" fill="#FEF3C7"/>`;
+      s += `<rect x="${wlx-34}" y="${wly-14}" width="68" height="8" rx="7" fill="#D49840"/>`;
+      s += `<rect x="${wlx-34}" y="${wly-8}" width="68" height="4" fill="#D49840"/>`;
+      wlines.forEach((wl, wi) => {
+        s += `<text x="${wlx}" y="${wly+2+wi*12}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8.5" fill="#5A2E00" font-weight="800">${wl}</text>`;
+      });
+    }
+
+    // Connecting arrow
+    if (i < stages.length-1) {
+      s += `<line x1="${x+boxW}" y1="${topY+boxH/2}" x2="${x+boxW+xGap}" y2="${topY+boxH/2}" stroke="#B0A090" stroke-width="2" stroke-linecap="round" marker-end="url(#parr)"/>`;
+    }
+    // Vertical connector dots
+    s += `<line x1="${cx}" y1="${topY+boxH}" x2="${cx}" y2="${midY}" stroke="${st.color}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.5"/>`;
+    if (st.gap) s += `<line x1="${cx}" y1="${midY+patH}" x2="${cx}" y2="${gapY}" stroke="#D49840" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.5"/>`;
+  });
+
+  // Legend
+  const legY = gapY + gapH + 22;
+  s += `<rect x="${leftPad}" y="${legY}" width="${svgW-leftPad-20}" height="28" rx="8" fill="rgba(255,255,255,0.5)"/>`;
+  const legItems = [
+    {fill:'white',stroke:'#5B9BD5',text:'Process Stage (color = dept)'},
+    {fill:'rgba(90,174,212,0.12)',stroke:'rgba(90,174,212,0.3)',text:'Patient Experience'},
+    {fill:'#FEF3C7',stroke:'#D49840',text:'Gap / Patient Pain Point'},
+    {fill:'#FEF3C7',stroke:'#D49840',text:'⚠ = Patient Wait Period'},
+  ];
+  legItems.forEach((li, idx) => {
+    const lx = leftPad + 10 + idx * 230;
+    s += `<rect x="${lx}" y="${legY+8}" width="12" height="12" rx="3" fill="${li.fill}" stroke="${li.stroke}" stroke-width="1.2"/>`;
+    s += `<text x="${lx+16}" y="${legY+18}" font-family="Nunito,sans-serif" font-size="9.5" font-weight="700" fill="#5C4A38">${li.text}</text>`;
+  });
+
+  s += '</svg>';
+  document.getElementById('patientChart').innerHTML = s;
+}
+
+// ═══════════════════════════════════
+// QUESTIONS & GAPS TAB
+// ═══════════════════════════════════
+const Q_ACCURACY = [
+  {c:'#5B9BD5', n:'FO', q:'Are there additional approval steps in Front Office not shown? (E.g. physician prescription requirements for certain insurers?)'},
+  {c:'#48B07C', n:'Lab', q:'Are there manual recording steps between machine output and pathologist sign-off not captured in the current flow?'},
+  {c:'#D4895A', n:'Log', q:'Does Logistics perform any sample quality check before dropping samples at accession, or is this only done by the lab tech?'},
+  {c:'#B07FD4', n:'Ins', q:'Does the Insurance flow differ between payers? (e.g. DAMAN direct billing vs. manual claim submission for others?)'},
+  {c:'#5AAED4', n:'BDE', q:'Is there a formal credit assessment or finance approval step before finalising client payment terms?'},
+  {c:'#D45B7A', n:'Acc', q:'Are there any petty cash or cash collection flows not shown in the Accounts section?'},
+  {c:'#52AF82', n:'IT',  q:'Does IT have any scheduled preventive maintenance windows separate from reactive support requests?'},
+  {c:'#5B7FAF', n:'GM',  q:'Are there monthly board-level or management committee reporting steps not captured in the GM flow?'},
+  {c:'#D4A55B', n:'PC',  q:'Does the Patient Coordinator manage consent form collection, or is this handled by Front Office?'},
+  {c:'#9B7BD4', n:'Pur', q:'Is there any approval step required from Lab Quality Manager before accepting a new reagent lot or supplier?'},
+];
+
+const Q_KPI = [
+  'What KPIs are currently tracked and formally reported monthly at management level?',
+  'Is patient satisfaction currently measured in any form — NPS, Google reviews, or internal survey?',
+  'What is the current average insurance claim approval cycle time from submission to payment receipt?',
+  'What is the current sample rejection rate? Which sample type has the highest rejection frequency?',
+  'How many active B2B clients does APML currently serve, and what is the monthly B2B sample volume?',
+  'What is the current average home collection TAT from booking to phlebotomist arrival?',
+  'What percentage of insurance claims are denied on first submission? What is the denial reversal rate?',
+];
+
+const GAP_CHECKS = [
+  {dept:'Front Office', color:'#5B9BD5', title:'No Approval Follow-up SLA', q:'Is there any informal target being used for approval follow-up frequency? (e.g. call every 24 hrs, every 48 hrs?)'},
+  {dept:'Front Office', color:'#5B9BD5', title:'Survey Data Not Analysed', q:'Where is source-of-visit survey data currently stored, and who is responsible for reviewing it?'},
+  {dept:'Lab', color:'#48B07C', title:'No STAT TAT KPI', q:'Is there an informal turnaround expectation for urgent samples that is used but not formally documented?'},
+  {dept:'Lab', color:'#48B07C', title:'Rejection Re-collection Not Logged', q:'When a sample is rejected, is any record kept of the re-collection outcome or root cause?'},
+  {dept:'Lab', color:'#48B07C', title:'No Pathologist Escalation Matrix', q:'If the part-time pathologist is unavailable, what happens to abnormal results waiting for approval?'},
+  {dept:'Logistics', color:'#D4895A', title:'No Driver Backup Coverage Matrix', q:'Has there been a situation where a collection route was uncovered due to driver absence? How was it resolved?'},
+  {dept:'Logistics', color:'#D4895A', title:'Trudoc Dispatch Before Eligibility', q:'How frequently are Trudoc logistics dispatched before eligibility is fully confirmed by reception?'},
+  {dept:'Insurance', color:'#B07FD4', title:'No 7-Day Submission Alert', q:'Has the 7-day internal submission target ever been missed? Was it detected, and what happened?'},
+  {dept:'Insurance', color:'#B07FD4', title:'No Denial Code Register', q:'Are denial codes ever discussed in team meetings? Is there any informal tracking happening?'},
+  {dept:'Accounts', color:'#D45B7A', title:'MIS Dependency — No Contingency', q:'Has MIS downtime ever caused an invoicing delay? What was the workaround used at the time?'},
+  {dept:'IT', color:'#52AF82', title:'No SLA Matrix', q:'How are urgent vs. non-urgent IT issues currently distinguished without a formal priority framework?'},
+  {dept:'BDE', color:'#5AAED4', title:'No CRM Pipeline Tracker', q:'Where is client pipeline data currently stored — Excel, WhatsApp notes, individual memory?'},
+  {dept:'Patient Coord.', color:'#D4A55B', title:'Handover from FO Undefined', q:'At what exact point does the Patient Coordinator take over from Front Office in a B2C patient journey?'},
+  {dept:'Patient Coord.', color:'#D4A55B', title:'No B2C Retention Tracking', q:'How many B2C patients approximately return for follow-up tests within 3 months? Is this tracked at all?'},
+];
+
+const Q_PRIORITY = [
+  'Of all the identified gaps, which one has the highest immediate financial impact on the business?',
+  'Which gap is generating the most patient complaints or negative feedback right now?',
+  'Are there any gaps where a fix has already been planned but not yet fully executed? What is blocking it?',
+  'If you could fix only ONE process gap in the next 30 days, which department and which gap would it be?',
+  'Which department head has raised the most process improvement requests in the last 6 months?',
+  'Are there any quick wins (fixes achievable in under 1 week) among the identified gaps?',
+];
+
+const Q_COMPLIANCE = [
+  'When was the last formal ADHICS v2 compliance audit conducted, and what were the findings?',
+  'Are there any open DOH inspection findings from the last 12 months that affected workflows?',
+  'How are staff DOH licence renewal dates currently tracked? Who owns this?',
+  'Is there a documented Business Continuity Plan (BCP) covering LIS downtime or key staff absence?',
+  'Are all insurance payer contracts current? When do key agreements expire?',
+  'Are all client agreements (B2B) documented with signed contracts, or are some informal verbal arrangements?',
+];
+
+function buildQuestions() {
+  // Accuracy questions
+  const acc = document.getElementById('q-accuracy');
+  acc.innerHTML = Q_ACCURACY.map((q,i) => `
+    <div class="q-item">
+      <div class="q-num" style="background:${q.c}">${q.n}</div>
+      <span>${q.q}</span>
+    </div>`).join('');
+
+  // KPI questions
+  const kpi = document.getElementById('q-kpi');
+  kpi.innerHTML = Q_KPI.map((q,i) => `
+    <div class="q-item">
+      <div class="q-num" style="background:#5B7FAF">${i+1}</div>
+      <span>${q}</span>
+    </div>`).join('');
+
+  // Gap checklist
+  const cl = document.getElementById('gap-checklist');
+  cl.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">` +
+    GAP_CHECKS.map((g,i) => `
+    <div class="gap-check-item" onclick="toggleCheck(this)">
+      <div class="gap-check-box" id="cb${i}">□</div>
+      <div class="gap-check-body">
+        <div class="gap-check-dept" style="color:${g.color}">${g.dept}</div>
+        <div class="gap-check-title">${g.title}</div>
+        <div class="gap-check-q">${g.q}</div>
+      </div>
+    </div>`).join('') + '</div>';
+
+  // Priority questions
+  const pri = document.getElementById('q-priority');
+  pri.innerHTML = Q_PRIORITY.map((q,i) => `
+    <div class="q-item">
+      <div class="q-num" style="background:#48B07C">${i+1}</div>
+      <span>${q}</span>
+    </div>`).join('');
+
+  // Compliance questions
+  const comp = document.getElementById('q-compliance');
+  comp.innerHTML = Q_COMPLIANCE.map((q,i) => `
+    <div class="q-item">
+      <div class="q-num" style="background:#D45B7A">${i+1}</div>
+      <span>${q}</span>
+    </div>`).join('');
+}
+
+function toggleCheck(el) {
+  const box = el.querySelector('.gap-check-box');
+  box.classList.toggle('checked');
+  box.textContent = box.classList.contains('checked') ? '✓' : '□';
+}
+
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
+function runInit() {
+  try { buildDeptNav(); } catch(e) { console.error('buildDeptNav failed:', e); }
+  try { buildMasterChart(); } catch(e) { console.error('buildMasterChart failed:', e); }
+  try { buildPatientChart(); } catch(e) { console.error('buildPatientChart failed:', e); }
+  try { buildQuestions(); } catch(e) { console.error('buildQuestions failed:', e); }
+  try { selectDept('fo'); } catch(e) { console.error('selectDept failed:', e); }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', runInit);
+} else {
+  runInit();
+}
+</script>
+</body>
+</html>
